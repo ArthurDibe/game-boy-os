@@ -241,7 +241,7 @@
                 let bts=[]; for(let y=15;y>15-rws;y--) for(let x=0;x<10;x++) if(M.random()<.4) bts.push({x,y}); bts.sort(()=>M.random()-.5);
                 for(let i=0;i<bts.length;i++){ let p=bts[i], iF=i<fN; this.bd[p.y][p.x]={c:sC(p.x,p.y), f:iF}; if(iF) this.fl++; }
                 while(this.fl<fN){ let rx=~~(M.random()*10), ry=15-~~(M.random()*rws); if(!this.bd[ry][rx]){ this.bd[ry][rx]={c:sC(rx,ry), f:1}; this.fl++; } else if(!this.bd[ry][rx].f){ this.bd[ry][rx].f=1; this.fl++; } }
-                this.DROP_SPEED = Math.max(150, 800 - this.lv * 60); this.gameState = 'FALLING';
+                this.st = 'FALLING'; this.fT = 0;
             },
             sp(){
                 let sh = [[[0,0],[-1,0],[1,0],[0,-1]], [[0,0],[1,0],[0,1],[1,1]], [[0,0],[-1,0],[1,0],[1,-1]], [[0,0],[-1,0],[1,0],[-1,-1]], [[0,0],[-1,0],[1,0],[2,0]], [[0,0],[-1,0],[0,-1],[1,-1]], [[0,0],[1,0],[0,-1],[-1,-1]]];
@@ -277,10 +277,16 @@
             art(x,y,w,h){ fr(x,y,w,h,C3); sr(x,y,w,h,C0); fr(x+w/2-10,y+10,20,10,C0); fr(x+w/2-5,y+20,10,10,C0); fr(x+10,y+35,10,10,C0); fr(x+22,y+35,10,10,C1); }
         };
 
-        /* === 3. CATRAP === */
+        /* === 3. CATRAP (FIXED MAP PARSING) === */
         const CR = {
             n:"CATRAP", st:'START', lv:0, fr:"", fT:0, rT:0, m:[], p:{x:0,y:0}, bs:[], es:[], hs:[],
-            ls:[ "WWWWWWWWWW WWP   B  W WWLWWWW  W WWL    E W WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW".split(' '), "WWWWWWWWWW WW B P B W WW WWWWW W WWE     EW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW".split(' '), "WWWWWWWWWW W P L B  W WWW L W  W W B L  E W W W L WW W WE  L    W WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW".split(' '), "WWWWWWWWWW W P L B  W WWWWLWW  W W B L  E W W WWLWWWWW WE  L    W WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW".split(' '), "WWWWWWWWWW W P  B W W WWW L DW W W   L E  W WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW WWWWWWWWWW".split(' ') ],
+            ls:[ 
+                [ "WWWWWWWWWW", "WWP   B  W", "WWLWWWW  W", "WWL    E W", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW" ],
+                [ "WWWWWWWWWW", "WW B P B W", "WW WWWWW W", "WWE     EW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW" ],
+                [ "WWWWWWWWWW", "W P L B  W", "WWW L W  W", "W B L  E W", "W W L WW W", "WE  L    W", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW" ],
+                [ "WWWWWWWWWW", "W P L B  W", "WWWWLWW  W", "W B L  E W", "W WWLWWWWW", "WE  L    W", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW" ],
+                [ "WWWWWWWWWW", "W P  B W W", "WWW L DW W", "W   L E  W", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWW" ]
+            ],
             ini(){ this.st='START'; this.lv=0; },
             ld(i){ if(i>=this.ls.length){ this.st='GAMEOVER'; this.fr="ALL CLEARED!"; return; } this.lv=i; let l=this.ls[i]; this.m=[]; this.bs=[]; this.es=[]; this.hs=[]; for(let y=0;y<10;y++){ let r=[]; for(let x=0;x<10;x++){ let c=l[y][x]; if(c==='P'){this.p={x,y};r.push(' ');}else if(c==='B'){this.bs.push({x,y});r.push(' ');}else if(c==='E'){this.es.push({x,y});r.push(' ');}else r.push(c); } this.m.push(r); } this.st='PLAYING'; },
             sv(){ this.hs.push({p:{...this.p}, b:this.bs.map(b=>({...b})), e:this.es.map(e=>({...e})), m:this.m.map(r=>[...r])}); if(this.hs.length>200)this.hs.shift(); },
@@ -367,7 +373,8 @@
             rB(){ this.p.x=80; this.b.x=100; this.b.y=175; this.b.vx=M.random()>.5?1:-1; this.b.vy=-1; this.b.s=.12+(this.lv*.02); },
             upd(dt){
                 if(this.st!=='PLAYING')return;
-                if(k.L)this.p.x-=.2*dt; if(k.R)this.p.x+=.2*dt; this.p.x=M.max(0,M.min(160,this.p.x));
+                let spd = k.B ? 0.3 : 0.2; 
+                if(k.L)this.p.x-=spd*dt; if(k.R)this.p.x+=spd*dt; this.p.x=M.max(0,M.min(160,this.p.x));
                 let bx=this.b.x+this.b.vx*this.b.s*dt, by=this.b.y+this.b.vy*this.b.s*dt;
                 if(bx<0){bx=0;this.b.vx*=-1;} if(bx>196){bx=196;this.b.vx*=-1;} if(by<0){by=0;this.b.vy*=-1;}
                 if(this.b.vy>0&&by+4>=this.p.y&&by<=this.p.y+this.p.h&&bx+4>=this.p.x&&bx<=this.p.x+this.p.w){
