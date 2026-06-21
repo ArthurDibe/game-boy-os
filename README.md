@@ -56,28 +56,6 @@ You can customize all keys in the UI by clicking the **KEY BINDINGS** button at 
 
 ---
 
-## 🚀 Boot Sequence (Quick Start)
-
-To run the project locally, make sure you have [Node.js](https://nodejs.org) installed.
-
-### 🔋 1. Insert Batteries (Install Dependencies)
-```bash
-npm install
-```
-
-### 🔌 2. Flick the Switch (Run Local Dev Server)
-```bash
-npm run dev
-```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-### 💾 3. Burn the ROM (Build for Production)
-```bash
-npm run build
-```
-This produces a highly compressed and minified production build in the `dist/` directory.
-
----
 
 ## 💾 Games Catalog
 
@@ -116,14 +94,50 @@ game-boy-os/
 
 ---
 
-## 🛠️ DevKit: Add Your Own Game
 
-Game Boy OS is fully open-source! Want to make a new game? Follow these 3 steps:
+## 🤝 How to Contribute (Beginner Friendly!)
 
-### 1️⃣ Create your game cartridge
+We welcome developers of all skill levels! Whether you want to add a new game, fix a bug, or improve documentation, here's how you can get started:
+
+### 🚀 1. Boot Sequence (Local Setup)
+
+To run the project locally, make sure you have [Node.js](https://nodejs.org) installed.
+
+1. **Fork the Repository**: Click the "Fork" button at the top right of this page to create your own copy of the project.
+2. **Clone your Fork**: Download your copy to your local machine and navigate into the folder:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/game-boy-os.git
+   cd game-boy-os
+   ```
+3. **Insert Batteries (Install Dependencies)**: Install the necessary dependencies:
+   ```bash
+   npm install
+   ```
+4. **Flick the Switch (Run Local Dev Server)**: Start the local development server to test changes in the browser:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:5173](http://localhost:5173) in your browser.
+5. **Burn the ROM (Build for Production)**: Build the application to verify compiling works:
+   ```bash
+   npm run build
+   ```
+   This produces a highly compressed and minified production build in the `dist/` directory.
+
+### 🛠️ 2. DevKit: Add Your Own Game
+
+Game Boy OS is fully open-source! Want to make a new game? Follow these steps:
+
+#### Step 1: Create a Branch
+Make a new branch for your game or fix:
+```bash
+git checkout -b my-new-game-or-feature
+```
+
+#### Step 2: Create your game cartridge
 Create a new file: `src/games/my_cool_game.js`
 
-### 2️⃣ Implement the Game Blueprint
+#### Step 3: Implement the Game Blueprint
 Every game must export a standard object. Here is the exact template:
 
 ```javascript
@@ -165,7 +179,7 @@ export const MyCoolGame = {
 };
 ```
 
-### 3️⃣ Register your game
+#### Step 4: Register your game
 Open `src/games/index.js` and add your game to the export list:
 
 ```diff
@@ -177,19 +191,16 @@ Open `src/games/index.js` and add your game to the export list:
 
 The Game Boy OS menu automatically registers, sorts, and renders your game to the select list!
 
----
+### 📥 3. Submit Your Contribution
 
-## 🤝 How to Contribute (Beginner Friendly!)
+Once your changes are tested and complete:
 
-We welcome developers of all skill levels! Whether you want to add a new game, fix a bug, or improve documentation, here's how you can get started:
-
-1. **Fork the Repository**: Click the "Fork" button at the top right of this page to create your own copy of the project.
-2. **Clone your Fork**: Download your copy to your local machine using `git clone https://github.com/YOUR_USERNAME/game-boy-os.git`.
-3. **Create a Branch**: Make a new branch for your feature or fix using `git checkout -b my-new-feature`.
-4. **Make Your Changes**: Add your new game, tweak the CSS, or fix that pesky bug. Don't worry about breaking things—just experiment and have fun!
-5. **Test It**: Run `npm run dev` and make sure everything works perfectly in your browser.
-6. **Commit and Push**: Save your changes with `git commit -m "Added my cool feature"` and push them to your fork with `git push origin my-new-feature`.
-7. **Open a Pull Request**: Go back to the main repository on GitHub and click "New Pull Request" to submit your work for review.
+1. **Commit and Push**: Save your changes and push them to your fork:
+   ```bash
+   git commit -am "Added my cool feature"
+   git push origin my-new-game-or-feature
+   ```
+2. **Open a Pull Request**: Go back to the main repository on GitHub and click "New Pull Request" to submit your work for review.
 
 If you get stuck, feel free to open an issue and ask for help. We are happy to guide you!
 
