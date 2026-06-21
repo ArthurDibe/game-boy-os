@@ -4,6 +4,7 @@
         
         /* Top Navigation Menu (Desktop/Large Screens) */
         .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; }
+        @media (max-width: 768px), (pointer: coarse) { .top-nav { display: none !important; } }
         .top-nav button { opacity: 0.2; background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:9px; cursor:pointer; border-radius:10px; box-shadow: 4px 4px 0 var(--c0); outline:none; text-align:left; transition:opacity 0.3s ease, transform 0.1s;}
         .top-nav button:hover, .top-nav button:focus { opacity: 1; }
         .top-nav button:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); opacity: 1; }
@@ -53,10 +54,10 @@
         
         body.ls .sb { 
             position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            width: calc(96vh + 100px); height: calc(96vh + 48px); 
-            margin: 0; border-radius: 12px; padding: 24px 50px; box-sizing: border-box; 
+            width: auto; height: auto; 
+            margin: 0; border-radius: 12px; padding: 24px 30px; box-sizing: border-box; 
         }
-        body.ls .cc { width: 96vh; height: 96vh; flex-shrink: 0; margin: 0; }
+        body.ls .cc { width: 85vh; height: 85vh; flex-shrink: 0; margin: 0; }
         
         body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
         body.ls .st { position: absolute; top: 14px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
