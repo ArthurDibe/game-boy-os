@@ -3,10 +3,10 @@
         body{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
         
         /* Top Navigation Menu (Desktop/Large Screens) */
-        .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; opacity: 0.2; transition: opacity 0.3s ease; }
-        .top-nav:hover, .top-nav:focus-within { opacity: 1; }
-        .top-nav button { background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:9px; cursor:pointer; border-radius:10px; box-shadow: 4px 4px 0 var(--c0); outline:none; text-align:left; transition:transform 0.1s;}
-        .top-nav button:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); }
+        .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; }
+        .top-nav button { opacity: 0.2; background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:9px; cursor:pointer; border-radius:10px; box-shadow: 4px 4px 0 var(--c0); outline:none; text-align:left; transition:opacity 0.3s ease, transform 0.1s;}
+        .top-nav button:hover, .top-nav button:focus { opacity: 1; }
+        .top-nav button:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); opacity: 1; }
 
         /* Hide Controls Class */
         body.hide-ctrl .cw { display: none !important; }
