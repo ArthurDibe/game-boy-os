@@ -2,23 +2,9 @@
 
 # 👾 GAME BOY OS 👾
 
-```text
-               __________________________
-              |  ______________________  |
-              | |                      | |
-              | |     GAME BOY OS      | |
-              | |  ==================  | |
-              | |                      | |
-              | |                      | |
-              | |______________________| |
-              |      _  N I N T E N D O  |
-              |    _| |_           (A)   |
-              |   |_   _|       (B)      |
-              |     |_|                  |
-              |          select start    |
-              |          ====== ======   |
-              |__________________________|
-```
+<br>
+<img src="./img/ui_screenshot.png" alt="Game Boy OS Screenshot" width="400"/>
+<br>
 
 [![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
