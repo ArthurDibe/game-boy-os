@@ -11,10 +11,14 @@
         html, body { color-scheme: light only; background-color: #1a1a1a; }
         body{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
         
-        /* Toggle Button for Desktop */
-        #tgl { position:fixed; top:20px; left:20px; background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:10px; cursor:pointer; border-radius:10px; z-index:1000; box-shadow: 4px 4px 0 var(--c0); outline:none; transition:transform 0.1s;}
-        #tgl:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); }
-        @media (pointer: coarse) { #tgl { display: none; } } /* Hide on touch devices */
+        /* Top Navigation Menu (Desktop/Large Screens) */
+        .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; opacity: 0.2; transition: opacity 0.3s ease; }
+        .top-nav:hover, .top-nav:focus-within { opacity: 1; }
+        .top-nav button { background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:9px; cursor:pointer; border-radius:10px; box-shadow: 4px 4px 0 var(--c0); outline:none; text-align:left; transition:transform 0.1s;}
+        .top-nav button:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); }
+
+        /* Hide Controls Class */
+        body.hide-ctrl .cw { display: none !important; }
 
         /* Core Game Boy styling - Upright Mode */
         #gb{background:var(--ca);background-image:linear-gradient(var(--ca),var(--ca));width:380px;height:680px;border-radius:15px 15px 60px 15px;padding:25px 20px;box-sizing:border-box;box-shadow:inset -5px -5px 15px rgba(0,0,0,.2),inset 5px 5px 15px rgba(255,255,255,.7),10px 10px 30px rgba(0,0,0,.8);display:flex;flex-direction:column;align-items:center;position:relative;transform-origin:center center;}
@@ -56,36 +60,59 @@
         /* === FLUID LANDSCAPE (FULLSCREEN GAMEPAD) MODE === */
         body.ls #gb { border-radius: 0; box-shadow: inset 0 0 50px rgba(0,0,0,.5); padding: 0; }
         
-        /* Maximize the green screen with perfectly symmetric 24px top & bottom padding */
         body.ls .sb { 
             position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            width: calc(96vh + 100px); height: calc(96vh + 48px); /* 50px Left/Right, 24px Top/Bottom */
+            width: calc(96vh + 100px); height: calc(96vh + 48px); 
             margin: 0; border-radius: 12px; padding: 24px 50px; box-sizing: border-box; 
         }
         body.ls .cc { width: 96vh; height: 96vh; flex-shrink: 0; margin: 0; }
         
-        /* Absolute position UI wrappers to prevent layout shifting */
         body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
-        
-        /* Text shifted downward to safely avoid top-edge screen cropping */
         body.ls .st { position: absolute; top: 14px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
         
-        /* Battery dot & text mathematically centered in the 50px left margin */
         body.ls .bat { position: absolute; left: 25px; top: 35px; transform: translateX(-50%); font-size: 6.5px; color: #aaa; flex-direction: column; align-items: center; width: auto; }
         body.ls .bat .bl { margin-bottom: 4px; }
         
         body.ls .cw { margin: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10; }
         body.ls .cw > * { pointer-events: auto; }
         
-        /* Giant responsive Gamepad Buttons */
         body.ls .dp { left: calc(12% + env(safe-area-inset-left)); top: 45%; transform: translate(-50%, -50%) scale(1.6); transform-origin: center center; margin: 0; }
         body.ls .ab { right: calc(12% + env(safe-area-inset-right)); left: auto; top: 45%; transform: translate(50%, -50%) rotate(-20deg) scale(1.6); transform-origin: center center; margin: 0; }
         body.ls .sysb { left: calc(12% + env(safe-area-inset-left)); right: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.4); transform-origin: center center; width: 120px; }
         body.ls .spk { right: calc(12% + env(safe-area-inset-right)); left: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.4); transform-origin: center center; }
+
+        /* Keyboard Mapping Modal */
+        #kModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
+        .k-box { background:var(--c0); border:4px solid var(--c2); padding:20px; border-radius:10px; color:var(--c3); font-family:'Press Start 2P', monospace; font-size:10px; width: 320px; max-width: 90%; }
+        .k-box h2 { text-align:center; margin-top:0; color:var(--c2); text-shadow: 2px 2px var(--cd); }
+        .kb-row { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;}
+        .kb-btn { background:var(--c1); color:var(--c3); border:2px solid var(--c2); padding:6px; font-family:inherit; font-size:8px; cursor:pointer; min-width: 110px; text-align: center; outline:none; }
+        .kb-btn.listening { background:var(--c3); color:var(--c0); border-color:var(--c1); animation: blink 0.5s infinite alternate; }
+        @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.5; } }
+        .kb-actions { display:flex; justify-content:space-between; margin-top: 20px; }
+        .kb-actions button { flex:1; margin:0 5px; padding:10px; border:2px solid; font-family:inherit; font-size:9px; cursor:pointer; }
+        .btn-close { background:var(--c1); color:var(--c3); border-color:var(--c2); }
+        .btn-reset { background:var(--cr); color:#fff; border-color:#500; }
     </style>
 </head>
 <body>
-    <button id="tgl">ROTATE UI</button>
+    <div class="top-nav">
+        <button id="tgl-rot">ROTATE UI</button>
+        <button id="tgl-ctrl">TOGGLE GAMEPAD</button>
+        <button id="btn-map">KEY BINDINGS</button>
+    </div>
+
+    <div id="kModal">
+        <div class="k-box">
+            <h2>KEY BINDINGS</h2>
+            <div id="kb-list"></div>
+            <div class="kb-actions">
+                <button id="kb-close" class="btn-close">CLOSE</button>
+                <button id="kb-reset" class="btn-reset">RESET</button>
+            </div>
+        </div>
+    </div>
+
     <div class="gb" id="gb">
         <div class="sb">
             <div class="sh"><div class="bat"><div class="bl"></div>BATTERY</div><div class="st">DOT MATRIX WITH STEREO SOUND</div></div>
@@ -116,7 +143,6 @@
             const gb = D.getElementById('gb');
             const isLs = D.body.classList.contains('ls');
             if (isLs) {
-                // By forcing exact native pixels, mobile browsers won't clip the background wrapper!
                 gb.style.width = W.innerWidth + 'px';
                 gb.style.height = W.innerHeight + 'px';
                 gb.style.transform = 'none'; 
@@ -139,13 +165,69 @@
 
         W.addEventListener('resize', checkOri);
         W.addEventListener('orientationchange', checkOri);
-        D.getElementById('tgl').addEventListener('click', () => { D.body.classList.toggle('ls'); rsz(); });
-        checkOri(); // Init layout
+        
+        // Button toggles
+        D.getElementById('tgl-rot').addEventListener('click', () => { D.body.classList.toggle('ls'); rsz(); });
+        D.getElementById('tgl-ctrl').addEventListener('click', () => { D.body.classList.toggle('hide-ctrl'); });
+        checkOri();
 
         const ctx = D.getElementById('cv').getContext('2d');
         const C0='#0f380f', C1='#306230', C2='#8bac0f', C3='#9bbc0f';
         let sys = 'MENU', gT = 0, k = {U:0, D:0, L:0, R:0, A:0, B:0, ST:0, SE:0};
         
+        // --- Keyboard Mapping System ---
+        let bindings = JSON.parse(localStorage.getItem('gbBindings')) || {
+            'U': 'ArrowUp', 'D': 'ArrowDown', 'L': 'ArrowLeft', 'R': 'ArrowRight',
+            'A': 'z', 'B': 'x', 'ST': 'Enter', 'SE': 'Shift'
+        };
+        let keyMap = {};
+        const updateKeyMap = () => {
+            keyMap = {};
+            for(let action in bindings) {
+                let b = bindings[action].toLowerCase();
+                keyMap[b] = action;
+            }
+        };
+        updateKeyMap();
+
+        let listeningAction = null;
+        const kbList = D.getElementById('kb-list');
+        const renderKb = () => {
+            kbList.innerHTML = '';
+            ['U','D','L','R','A','B','ST','SE'].forEach(act => {
+                let lbl = act==='U'?'UP':act==='D'?'DOWN':act==='L'?'LEFT':act==='R'?'RIGHT':act==='ST'?'START':act==='SE'?'SELECT':act;
+                
+                let row = D.createElement('div');
+                row.className = 'kb-row';
+                row.innerHTML = `<span>${lbl}</span>`;
+                
+                let btn = D.createElement('button');
+                btn.className = 'kb-btn' + (listeningAction === act ? ' listening' : '');
+                btn.innerText = listeningAction === act ? 'PRESS KEY...' : (bindings[act] === ' ' ? 'Space' : bindings[act].toUpperCase());
+                
+                btn.onclick = () => { listeningAction = act; renderKb(); };
+                row.appendChild(btn);
+                kbList.appendChild(row);
+            });
+        };
+
+        D.getElementById('btn-map').onclick = () => { 
+            listeningAction = null; 
+            renderKb(); 
+            D.getElementById('kModal').style.display = 'flex'; 
+        };
+        D.getElementById('kb-close').onclick = () => { 
+            listeningAction = null;
+            D.getElementById('kModal').style.display = 'none'; 
+        };
+        D.getElementById('kb-reset').onclick = () => {
+            bindings = { 'U': 'ArrowUp', 'D': 'ArrowDown', 'L': 'ArrowLeft', 'R': 'ArrowRight', 'A': 'z', 'B': 'x', 'ST': 'Enter', 'SE': 'Shift' };
+            localStorage.setItem('gbBindings', JSON.stringify(bindings));
+            updateKeyMap();
+            listeningAction = null;
+            renderKb();
+        };
+
         const txt = (t,x,y,sz,a='center',c=C0) => { ctx.fillStyle=c; ctx.font=`${sz}px "Press Start 2P"`; ctx.textAlign=a; ctx.fillText(t,x,y); };
         const fr = (x,y,w,h,c=C0) => { ctx.fillStyle=c; ctx.fillRect(x,y,w,h); };
         const sr = (x,y,w,h,c=C0) => { ctx.strokeStyle=c; ctx.lineWidth=2; ctx.strokeRect(x,y,w,h); };
@@ -1064,9 +1146,41 @@
             }
         }
 
-        const kM = { "ArrowUp":"U","w":"U","W":"U", "ArrowDown":"D","s":"D","S":"D", "ArrowLeft":"L","a":"L","A":"L", "ArrowRight":"R","d":"R","D":"R", "Enter":"ST", "Shift":"SE", "z":"A","Z":"A"," ":"A", "x":"B","X":"B","Backspace":"B" };
-        D.addEventListener("keydown", (e) => { if(kM[e.key]) { e.preventDefault(); if(!k[kM[e.key]]) trg(kM[e.key]); k[kM[e.key]] = 1; } });
-        D.addEventListener("keyup", (e) => { if(kM[e.key]) { e.preventDefault(); k[kM[e.key]] = 0; } });
+        // Modified keyboard event listeners for dynamic mapping
+        D.addEventListener("keydown", (e) => { 
+            const kModal = D.getElementById('kModal');
+            if(kModal.style.display === 'flex') {
+                if(listeningAction) {
+                    e.preventDefault();
+                    bindings[listeningAction] = e.key === ' ' ? 'Space' : e.key;
+                    localStorage.setItem('gbBindings', JSON.stringify(bindings));
+                    updateKeyMap();
+                    listeningAction = null;
+                    renderKb();
+                }
+                return;
+            }
+
+            let keyStr = e.key.toLowerCase();
+            if(e.key === ' ') keyStr = 'space';
+            let action = keyMap[keyStr];
+            
+            if(action) { 
+                e.preventDefault(); 
+                if(!k[action]) trg(action); 
+                k[action] = 1; 
+            } 
+        });
+
+        D.addEventListener("keyup", (e) => { 
+            let keyStr = e.key.toLowerCase();
+            if(e.key === ' ') keyStr = 'space';
+            let action = keyMap[keyStr];
+            if(action) { 
+                e.preventDefault(); 
+                k[action] = 0; 
+            } 
+        });
 
         ['U','D','L','R','A','B','ST','SE'].forEach(btn => {
             const el = D.getElementById('b'+btn);
