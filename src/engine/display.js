@@ -3,6 +3,7 @@ import { W, D } from './state.js';
 export const rsz = () => {
     const gb = D.getElementById('gb');
     const isLs = D.body.classList.contains('ls');
+    D.body.style.height = W.innerHeight + 'px';
     if (isLs) {
         gb.style.width = W.innerWidth + 'px';
         gb.style.height = W.innerHeight + 'px';

@@ -1,6 +1,6 @@
 :root{--c0:#0f380f;--c1:#306230;--c2:#8bac0f;--c3:#9bbc0f;--ca:#c3c7c7;--cb:#555;--cr:#903;--cd:#222}
-        html, body { color-scheme: light only; background-color: #1a1a1a; }
-        body{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
+        html, body { color-scheme: light only; background-color: #1a1a1a; height: 100%; }
+        body{display:flex;justify-content:center;align-items:center;height:100dvh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
         
         /* Top Navigation Menu (Desktop/Large Screens) */
         .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; }
