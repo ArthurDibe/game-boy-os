@@ -11,7 +11,7 @@
 [![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
-**A modern, lightweight, high-performance web-based simulation of a classic handheld system, featuring a suite of 9 nostalgic mini-games built from scratch.**
+**A modern, lightweight, high-performance web-based simulation of a classic handheld system, featuring a growing collection of nostalgic games built from scratch.**
 
 </div>
 
@@ -81,7 +81,7 @@ This produces a highly compressed and minified production build in the `dist/` d
 
 ## 💾 Games Catalog
 
-Our custom cartridge includes **9 fully playable games**. Select them from the OS Menu!
+Our custom cartridge includes **a growing collection of fully playable games**. Select them from the OS Menu!
 
 | | Title | Genre | Description |
 |---|---|---|---|
@@ -92,7 +92,7 @@ Our custom cartridge includes **9 fully playable games**. Select them from the O
 | 🪂 | **Skydive** | Action | Free fall downward, avoiding obstacles on your way down. |
 | 🏓 | **Pong** | Sports | Simple AI-driven paddle tennis simulation. |
 | 💥 | **Brick Breaker**| Arcade | Retro brick deflection layout with bounce physics. |
-| ⚔️ | **Tale of Orb** | RPG | A complete mini-RPG adventure with dungeon grids. |
+| ⚔️ | **Tale of Orb** | RPG | A complete RPG adventure with dungeon grids. |
 | 💣 | **Bomber Boy** | Action | Maze exploration with strategic bomb placement. |
 
 ---
