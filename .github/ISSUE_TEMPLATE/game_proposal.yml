@@ -1,0 +1,34 @@
+name: 👾 New Game Proposal
+description: Suggest a new retro game cartridge to build or include
+labels: ["game request", "discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a retro 8-bit game to add to the Game Boy OS cartridge? Describe it here!
+  - type: input
+    id: game-title
+    attributes:
+      label: Game Title
+      placeholder: e.g., Space Block Dodge
+    validations:
+      required: true
+  - type: textarea
+    id: game-description
+    attributes:
+      label: Game Concept & Description
+      placeholder: Describe how the game works, the main objectives, and how it fits within the 200x200 canvas display.
+    validations:
+      required: true
+  - type: textarea
+    id: game-controls
+    attributes:
+      label: How would controls work?
+      placeholder: e.g., D-Pad to move left/right, A button to jump, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References or Inspiration (Optional)
+      placeholder: Share names of classic retro games this is inspired by, or link to layout ideas.

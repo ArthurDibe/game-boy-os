@@ -1,0 +1,38 @@
+name: 🐛 Bug Report
+description: Report a bug or issue with Game Boy OS or its games
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report!
+  - type: textarea
+    id: describe-bug
+    attributes:
+      label: Describe the Bug
+      placeholder: Tell us what is happening and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+  - type: input
+    id: os-browser
+    attributes:
+      label: OS and Browser Info
+      placeholder: e.g., Windows 11 / Chrome 124, iOS 17 / Safari
+    validations:
+      required: true
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: Screenshots or Extra Context
+      placeholder: Paste any screenshots, console error logs, or GIFs here if helpful.

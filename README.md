@@ -87,122 +87,22 @@ game-boy-os/
 │   │   ├── display.js  # Screen orientation and rendering setups
 │   │   ├── input.js    # Keyboard binding handlers & virtual gamepad events
 │   │   └── state.js    # Global configurations, shapes/text draw tools
-│   └── games/          # Game cartridges folder 
-│       ├── index.js    # Aggregates and exports the active games array
-│       └── [game].js   # Isolated game logic files
+│   └── games/          # Game cartridges folder (contains index.js and game modules)
 ```
 
 ---
 
-
 ## 🤝 How to Contribute (Beginner Friendly!)
 
-We welcome developers of all skill levels! Whether you want to add a new game, fix a bug, or improve documentation, here's how you can get started:
+We welcome developers of all skill levels! Whether you want to add a new game, fix a bug, or improve documentation, we'd love your help.
 
-### 🚀 1. Boot Sequence (Local Setup)
+Check out our step-by-step **[Contributing Guide (CONTRIBUTING.md)](./CONTRIBUTING.md)** to learn how to:
+1. Setup the project locally and run the development server.
+2. Build your own game cartridge using our 8-bit JavaScript game blueprint.
+3. Submit your pull request.
 
-To run the project locally, make sure you have [Node.js](https://nodejs.org) installed.
+If you get stuck, feel free to open an issue or ask for help. We are happy to guide you!
 
-1. **Fork the Repository**: Click the "Fork" button at the top right of this page to create your own copy of the project.
-2. **Clone your Fork**: Download your copy to your local machine and navigate into the folder:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/game-boy-os.git
-   cd game-boy-os
-   ```
-3. **Insert Batteries (Install Dependencies)**: Install the necessary dependencies:
-   ```bash
-   npm install
-   ```
-4. **Flick the Switch (Run Local Dev Server)**: Start the local development server to test changes in the browser:
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:5173](http://localhost:5173) in your browser.
-5. **Burn the ROM (Build for Production)**: Build the application to verify compiling works:
-   ```bash
-   npm run build
-   ```
-   This produces a highly compressed and minified production build in the `dist/` directory.
-
-### 🛠️ 2. DevKit: Add Your Own Game
-
-Game Boy OS is fully open-source! Want to make a new game? Follow these steps:
-
-#### Step 1: Create a Branch
-Make a new branch for your game or fix:
-```bash
-git checkout -b my-new-game-or-feature
-```
-
-#### Step 2: Create your game cartridge
-Create a new file: `src/games/my_cool_game.js`
-
-#### Step 3: Implement the Game Blueprint
-Every game must export a standard object. Here is the exact template:
-
-```javascript
-import { M, ctx, C0, C1, C2, C3, txt, fr, sr, state } from '../engine/state.js';
-
-export const MyCoolGame = {
-    // 1. Name of the game (displayed in the menu list)
-    n: "MY COOL GAME",
-
-    // 2. Setup initial variables
-    ini() {
-        this.score = 0;
-        this.playerX = 100;
-    },
-
-    // 3. Update game ticks (dt = delta time in milliseconds)
-    upd(dt) {
-        if (state.k.L) this.playerX -= 0.1 * dt;
-        if (state.k.R) this.playerX += 0.1 * dt;
-    },
-
-    // 4. Handle menu/input button down presses
-    inp(btn) {
-        if (btn === 'A') { /* Do action */ }
-    },
-
-    // 5. Draw elements on the screen (200x200 canvas)
-    drw() {
-        txt("SCORE: " + this.score, 10, 20, 8, 'left');
-        fr(this.playerX, 150, 16, 16, C0); // Draw player block
-    },
-
-    // 6. Draw a custom 80x50 retro thumbnail art for the main menu
-    art(x, y, w, h) {
-        fr(x, y, w, h, C3); // Draw border/background
-        sr(x, y, w, h, C0);
-        txt("COOL", x + w/2, y + h/2, 10, 'center');
-    }
-};
-```
-
-#### Step 4: Register your game
-Open `src/games/index.js` and add your game to the export list:
-
-```diff
-+import { MyCoolGame } from './my_cool_game.js';
-
--export const GL = [T2, CR, IV, SN, SD, PG, BB, RP, BM];
-+export const GL = [T2, CR, IV, SN, SD, PG, BB, RP, BM, MyCoolGame];
-```
-
-The Game Boy OS menu automatically registers, sorts, and renders your game to the select list!
-
-### 📥 3. Submit Your Contribution
-
-Once your changes are tested and complete:
-
-1. **Commit and Push**: Save your changes and push them to your fork:
-   ```bash
-   git commit -am "Added my cool feature"
-   git push origin my-new-game-or-feature
-   ```
-2. **Open a Pull Request**: Go back to the main repository on GitHub and click "New Pull Request" to submit your work for review.
-
-If you get stuck, feel free to open an issue and ask for help. We are happy to guide you!
 
 ---
 
