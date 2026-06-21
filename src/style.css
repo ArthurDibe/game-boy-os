@@ -54,10 +54,10 @@
         
         body.ls .sb { 
             position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            width: auto; height: auto; 
+            width: auto; height: calc(100% - 10px); 
             margin: 0; border-radius: 12px; padding: 24px 30px; box-sizing: border-box; 
         }
-        body.ls .cc { width: 75vh; height: 75vh; flex-shrink: 0; margin: 0; max-width: 80vw; max-height: 80vw; }
+        body.ls .cc { width: auto; height: 100%; aspect-ratio: 1 / 1; flex-shrink: 0; margin: 0; max-width: 60vw; }
         
         body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
         body.ls .st { position: absolute; top: 10px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
