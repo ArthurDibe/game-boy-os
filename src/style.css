@@ -1,0 +1,86 @@
+:root{--c0:#0f380f;--c1:#306230;--c2:#8bac0f;--c3:#9bbc0f;--ca:#c3c7c7;--cb:#555;--cr:#903;--cd:#222}
+        html, body { color-scheme: light only; background-color: #1a1a1a; }
+        body{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
+        
+        /* Top Navigation Menu (Desktop/Large Screens) */
+        .top-nav { position:fixed; top:15px; left:15px; display:flex; flex-direction:column; gap:10px; z-index:1000; opacity: 0.2; transition: opacity 0.3s ease; }
+        .top-nav:hover, .top-nav:focus-within { opacity: 1; }
+        .top-nav button { background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:9px; cursor:pointer; border-radius:10px; box-shadow: 4px 4px 0 var(--c0); outline:none; text-align:left; transition:transform 0.1s;}
+        .top-nav button:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); }
+
+        /* Hide Controls Class */
+        body.hide-ctrl .cw { display: none !important; }
+
+        /* Core Game Boy styling - Upright Mode */
+        #gb{background:var(--ca);background-image:linear-gradient(var(--ca),var(--ca));width:380px;height:680px;border-radius:15px 15px 60px 15px;padding:25px 20px;box-sizing:border-box;box-shadow:inset -5px -5px 15px rgba(0,0,0,.2),inset 5px 5px 15px rgba(255,255,255,.7),10px 10px 30px rgba(0,0,0,.8);display:flex;flex-direction:column;align-items:center;position:relative;transform-origin:center center;}
+        .tg{display:flex;gap:15px;position:absolute;top:0;width:100%;border-top:3px solid rgba(0,0,0,.1)}
+        .sb{background:var(--cb);background-image:linear-gradient(var(--cb),var(--cb));width:100%;height:350px;padding:20px 0;border-radius:10px 10px 40px 10px;box-shadow:inset 2px 2px 10px rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+        .sh{width:80%;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative}
+        .bat{display:flex;flex-direction:column;align-items:center;font-family:sans-serif;font-size:8px;color:#aaa;letter-spacing:1px;position:absolute;left:-25px}
+        .bl{width:10px;height:10px;background:#f33;background-image:linear-gradient(#f33,#f33);border-radius:50%;box-shadow:0 0 5px #f33,inset 1px 1px 2px rgba(255,255,255,.5);margin-bottom:3px}
+        .st{color:#aaa;font-family:sans-serif;font-size:10px;letter-spacing:1px;text-align:center;width:100%;margin-left:20px}
+        
+        /* Enlarged Green Screen */
+        .cc{width:280px;height:280px;background:var(--c3);background-image:linear-gradient(var(--c3),var(--c3));box-shadow:inset 3px 3px 10px rgba(0,0,0,.3);border:2px solid var(--c1);position:relative}
+        canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
+        
+        /* Upright Controls */
+        .cw{width:100%;flex-grow:1;position:relative;margin-top:20px}
+        .dp{position:absolute;left:15px;top:20px;width:90px;height:90px; transition: transform 0.3s ease;}
+        .dpp{background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));position:absolute;border-radius:2px;box-shadow:inset 1px 1px 2px rgba(255,255,255,.2),inset -1px -1px 3px rgba(0,0,0,.5);cursor:pointer}
+        .dpp:active{background:#111;background-image:linear-gradient(#111,#111);}
+        .dpv{width:30px;height:90px;left:30px;top:0} .dph{width:90px;height:30px;left:0;top:30px}
+        .dpc{width:30px;height:30px;background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));position:absolute;left:30px;top:30px;z-index:2}
+        .dpc::after{content:'';position:absolute;top:5px;left:5px;width:20px;height:20px;background:rgba(0,0,0,.2);border-radius:50%}
+        .ab{position:absolute;right:15px;top:30px;width:120px;height:60px;transform:rotate(-20deg);display:flex;justify-content:space-between;align-items:center; transition: transform 0.3s ease;}
+        .abc{display:flex;flex-direction:column;align-items:center;gap:5px}
+        .ba{width:45px;height:45px;background:var(--cr);background-image:linear-gradient(var(--cr),var(--cr));border-radius:50%;box-shadow:inset -2px -2px 5px rgba(0,0,0,.5),inset 2px 2px 5px rgba(255,255,255,.4),2px 2px 5px rgba(0,0,0,.4);cursor:pointer;border:none;outline:none}
+        .ba:active{transform:scale(.95);box-shadow:inset 3px 3px 8px rgba(0,0,0,.6)}
+        .blab{font-family:sans-serif;color:var(--cd);font-size:14px;font-weight:bold;letter-spacing:1px}
+        .sysb{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);display:flex;gap:20px; transition: transform 0.3s ease;}
+        .sysbc{display:flex;flex-direction:column;align-items:center;gap:5px}
+        .bsy{width:50px;height:12px;background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));border-radius:10px;transform:rotate(-20deg);box-shadow:inset -1px -1px 3px rgba(0,0,0,.5),inset 1px 1px 2px rgba(255,255,255,.2),1px 1px 3px rgba(0,0,0,.3);cursor:pointer}
+        .bsy:active{transform:rotate(-20deg) scale(.95);box-shadow:inset 2px 2px 5px rgba(0,0,0,.6)}
+        .sysl{font-family:sans-serif;color:var(--cd);font-size:10px;font-weight:bold}
+        .spk{position:absolute;bottom:20px;right:20px;display:flex;gap:5px;transform:rotate(-20deg); transition: transform 0.3s ease;}
+        .sps{width:6px;height:40px;background:rgba(0,0,0,.2);background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));border-radius:3px;box-shadow:inset 1px 1px 2px rgba(0,0,0,.4),1px 1px 0 rgba(255,255,255,.4)}
+        .dh{position:absolute;z-index:10;cursor:pointer}
+        .hu{width:30px;height:30px;left:30px;top:0} .hd{width:30px;height:30px;left:30px;bottom:0}
+        .hl{width:30px;height:30px;left:0;top:30px} .hr{width:30px;height:30px;right:0;top:30px}
+
+        /* === FLUID LANDSCAPE (FULLSCREEN GAMEPAD) MODE === */
+        body.ls #gb { border-radius: 0; box-shadow: inset 0 0 50px rgba(0,0,0,.5); padding: 0; }
+        
+        body.ls .sb { 
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
+            width: calc(96vh + 100px); height: calc(96vh + 48px); 
+            margin: 0; border-radius: 12px; padding: 24px 50px; box-sizing: border-box; 
+        }
+        body.ls .cc { width: 96vh; height: 96vh; flex-shrink: 0; margin: 0; }
+        
+        body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
+        body.ls .st { position: absolute; top: 14px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
+        
+        body.ls .bat { position: absolute; left: 25px; top: 35px; transform: translateX(-50%); font-size: 6.5px; color: #aaa; flex-direction: column; align-items: center; width: auto; }
+        body.ls .bat .bl { margin-bottom: 4px; }
+        
+        body.ls .cw { margin: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10; }
+        body.ls .cw > * { pointer-events: auto; }
+        
+        body.ls .dp { left: calc(12% + env(safe-area-inset-left)); top: 45%; transform: translate(-50%, -50%) scale(1.6); transform-origin: center center; margin: 0; }
+        body.ls .ab { right: calc(12% + env(safe-area-inset-right)); left: auto; top: 45%; transform: translate(50%, -50%) rotate(-20deg) scale(1.6); transform-origin: center center; margin: 0; }
+        body.ls .sysb { left: calc(12% + env(safe-area-inset-left)); right: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.4); transform-origin: center center; width: 120px; }
+        body.ls .spk { right: calc(12% + env(safe-area-inset-right)); left: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.4); transform-origin: center center; }
+
+        /* Keyboard Mapping Modal */
+        #kModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
+        .k-box { background:var(--c0); border:4px solid var(--c2); padding:20px; border-radius:10px; color:var(--c3); font-family:'Press Start 2P', monospace; font-size:10px; width: 320px; max-width: 90%; }
+        .k-box h2 { text-align:center; margin-top:0; color:var(--c2); text-shadow: 2px 2px var(--cd); }
+        .kb-row { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;}
+        .kb-btn { background:var(--c1); color:var(--c3); border:2px solid var(--c2); padding:6px; font-family:inherit; font-size:8px; cursor:pointer; min-width: 110px; text-align: center; outline:none; }
+        .kb-btn.listening { background:var(--c3); color:var(--c0); border-color:var(--c1); animation: blink 0.5s infinite alternate; }
+        @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.5; } }
+        .kb-actions { display:flex; justify-content:space-between; margin-top: 20px; }
+        .kb-actions button { flex:1; margin:0 5px; padding:10px; border:2px solid; font-family:inherit; font-size:9px; cursor:pointer; }
+        .btn-close { background:var(--c1); color:var(--c3); border-color:var(--c2); }
+        .btn-reset { background:var(--cr); color:#fff; border-color:#500; }

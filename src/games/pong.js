@@ -1,0 +1,11 @@
+import { M, ctx, C0, C1, C2, C3, txt, fr, sr, state } from '../engine/state.js';
+
+export const PG = {
+            n:"PONG", st:'START', sP:0, sA:0, py:88, ay:88, b:{x:98,y:98,dx:1,dy:1,s:.1},
+            ini(){ this.st='START'; this.sP=0; this.sA=0; this.rB(); },
+            rB(sc='P'){ this.b={x:98,y:98,s:.1,dx:sc==='P'?1:-1,dy:(M.random()>.5?1:-1)*(M.random()*.4+.4)}; this.py=88; this.ay=88; },
+            upd(dt){ if(this.st!=='PLAYING')return; if(state.k.U)this.py-=.12*dt; if(state.k.D)this.py+=.12*dt; this.py=M.max(0,M.min(176,this.py)); let aC=this.ay+12; if(aC<this.b.y-2)this.ay+=.09*dt; else if(aC>this.b.y+6)this.ay-=.09*dt; this.ay=M.max(0,M.min(176,this.ay)); this.b.x+=this.b.dx*this.b.s*dt; this.b.y+=this.b.dy*this.b.s*dt; if(this.b.y<=0){this.b.y=0;this.b.dy*=-1;} if(this.b.y>=196){this.b.y=196;this.b.dy*=-1;} if(this.b.dx<0&&this.b.x<=14&&this.b.x+4>=10&&this.b.y+4>=this.py&&this.b.y<=this.py+24){this.b.x=14;this.b.dx*=-1;this.b.s+=.005;this.b.dy+=((this.b.y+2)-(this.py+12))*.05;} if(this.b.dx>0&&this.b.x+4>=186&&this.b.x<=190&&this.b.y+4>=this.ay&&this.b.y<=this.ay+24){this.b.x=182;this.b.dx*=-1;this.b.s+=.005;this.b.dy+=((this.b.y+2)-(this.ay+12))*.05;} if(this.b.x<0){this.sA++; if(this.sA>=5)this.st='GAMEOVER'; else this.rB('A');} if(this.b.x>200){this.sP++; if(this.sP>=5)this.st='GAMEOVER'; else this.rB('P');} },
+            inp(b){ if(this.st!=='PLAYING'&&(b==='ST'||b==='A')){ if(this.st==='GAMEOVER')this.ini(); this.st='PLAYING'; } },
+            drw(){ if(this.st==='START'){txt("PONG",100,20,16);txt("PRESS START",100,140,8);} else if(this.st==='PLAYING'){ for(let i=0;i<200;i+=8)fr(99,i+2,2,4,C1); txt(this.sP,60,20,16); txt(this.sA,140,20,16); fr(10,this.py,4,24,C0); fr(186,this.ay,4,24,C0); fr(this.b.x,this.b.y,4,4,C0); } else if(this.st==='GAMEOVER'){ txt("GAME OVER",100,80,12); txt(this.sP>=5?"YOU WIN!":"YOU LOSE",100,110,10); } },
+            art(x,y,w,h){ fr(x,y,w,h,C3); sr(x,y,w,h,C0); fr(x+5,y+10,4,20,C0); fr(x+w-9,y+20,4,20,C0); fr(x+25,y+25,4,4,C0); for(let i=0;i<h;i+=8)fr(x+w/2-1,y+i+2,2,4,C1); }
+        };
