@@ -3,45 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="color-scheme" content="light only">
     <title>Game Boy OS</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root{--c0:#0f380f;--c1:#306230;--c2:#8bac0f;--c3:#9bbc0f;--ca:#c3c7c7;--cb:#555;--cr:#903;--cd:#222}
-        body{background:#1a1a1a;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
-        #gb{background:var(--ca);width:360px;height:620px;border-radius:15px 15px 60px 15px;padding:25px 20px;box-sizing:border-box;box-shadow:inset -5px -5px 15px rgba(0,0,0,.2),inset 5px 5px 15px rgba(255,255,255,.7),10px 10px 30px rgba(0,0,0,.8);display:flex;flex-direction:column;align-items:center;position:relative;transform-origin:center center}
+        html, body { color-scheme: light only; background-color: #1a1a1a; }
+        body{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;font-family:'Press Start 2P',monospace;touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
+        
+        /* Toggle Button for Desktop */
+        #tgl { position:fixed; top:20px; left:20px; background:var(--c1); background-image:linear-gradient(var(--c1),var(--c1)); color:var(--c3); border:4px solid var(--c0); padding:10px; font-family:'Press Start 2P',monospace; font-size:10px; cursor:pointer; border-radius:10px; z-index:1000; box-shadow: 4px 4px 0 var(--c0); outline:none; transition:transform 0.1s;}
+        #tgl:active { transform:translate(2px,2px); box-shadow: 2px 2px 0 var(--c0); }
+        @media (pointer: coarse) { #tgl { display: none; } } /* Hide on touch devices */
+
+        /* Core Game Boy styling - Upright Mode */
+        #gb{background:var(--ca);background-image:linear-gradient(var(--ca),var(--ca));width:380px;height:680px;border-radius:15px 15px 60px 15px;padding:25px 20px;box-sizing:border-box;box-shadow:inset -5px -5px 15px rgba(0,0,0,.2),inset 5px 5px 15px rgba(255,255,255,.7),10px 10px 30px rgba(0,0,0,.8);display:flex;flex-direction:column;align-items:center;position:relative;transform-origin:center center;}
         .tg{display:flex;gap:15px;position:absolute;top:0;width:100%;border-top:3px solid rgba(0,0,0,.1)}
-        .sb{background:var(--cb);width:100%;height:280px;padding:20px 0;border-radius:10px 10px 40px 10px;box-shadow:inset 2px 2px 10px rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+        .sb{background:var(--cb);background-image:linear-gradient(var(--cb),var(--cb));width:100%;height:350px;padding:20px 0;border-radius:10px 10px 40px 10px;box-shadow:inset 2px 2px 10px rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
         .sh{width:80%;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative}
-        .bat{display:flex;flex-direction:column;align-items:center;font-family:sans-serif;font-size:8px;color:#aaa;letter-spacing:1px;position:absolute;left:-20px}
-        .bl{width:10px;height:10px;background:#f33;border-radius:50%;box-shadow:0 0 5px #f33,inset 1px 1px 2px rgba(255,255,255,.5);margin-bottom:3px}
+        .bat{display:flex;flex-direction:column;align-items:center;font-family:sans-serif;font-size:8px;color:#aaa;letter-spacing:1px;position:absolute;left:-25px}
+        .bl{width:10px;height:10px;background:#f33;background-image:linear-gradient(#f33,#f33);border-radius:50%;box-shadow:0 0 5px #f33,inset 1px 1px 2px rgba(255,255,255,.5);margin-bottom:3px}
         .st{color:#aaa;font-family:sans-serif;font-size:10px;letter-spacing:1px;text-align:center;width:100%;margin-left:20px}
-        .cc{width:200px;height:200px;background:var(--c3);box-shadow:inset 3px 3px 10px rgba(0,0,0,.3);border:2px solid var(--c1);position:relative}
+        
+        /* Enlarged Green Screen */
+        .cc{width:280px;height:280px;background:var(--c3);background-image:linear-gradient(var(--c3),var(--c3));box-shadow:inset 3px 3px 10px rgba(0,0,0,.3);border:2px solid var(--c1);position:relative}
         canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
-        .cw{width:100%;flex-grow:1;position:relative;margin-top:40px}
-        .dp{position:absolute;left:10px;top:20px;width:90px;height:90px}
-        .dpp{background:var(--cd);position:absolute;border-radius:2px;box-shadow:inset 1px 1px 2px rgba(255,255,255,.2),inset -1px -1px 3px rgba(0,0,0,.5);cursor:pointer}
-        .dpp:active{background:#111}
+        
+        /* Upright Controls */
+        .cw{width:100%;flex-grow:1;position:relative;margin-top:20px}
+        .dp{position:absolute;left:15px;top:20px;width:90px;height:90px; transition: transform 0.3s ease;}
+        .dpp{background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));position:absolute;border-radius:2px;box-shadow:inset 1px 1px 2px rgba(255,255,255,.2),inset -1px -1px 3px rgba(0,0,0,.5);cursor:pointer}
+        .dpp:active{background:#111;background-image:linear-gradient(#111,#111);}
         .dpv{width:30px;height:90px;left:30px;top:0} .dph{width:90px;height:30px;left:0;top:30px}
-        .dpc{width:30px;height:30px;background:var(--cd);position:absolute;left:30px;top:30px;z-index:2}
+        .dpc{width:30px;height:30px;background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));position:absolute;left:30px;top:30px;z-index:2}
         .dpc::after{content:'';position:absolute;top:5px;left:5px;width:20px;height:20px;background:rgba(0,0,0,.2);border-radius:50%}
-        .ab{position:absolute;right:10px;top:30px;width:120px;height:60px;transform:rotate(-20deg);display:flex;justify-content:space-between;align-items:center}
+        .ab{position:absolute;right:15px;top:30px;width:120px;height:60px;transform:rotate(-20deg);display:flex;justify-content:space-between;align-items:center; transition: transform 0.3s ease;}
         .abc{display:flex;flex-direction:column;align-items:center;gap:5px}
-        .ba{width:45px;height:45px;background:var(--cr);border-radius:50%;box-shadow:inset -2px -2px 5px rgba(0,0,0,.5),inset 2px 2px 5px rgba(255,255,255,.4),2px 2px 5px rgba(0,0,0,.4);cursor:pointer;border:none;outline:none}
+        .ba{width:45px;height:45px;background:var(--cr);background-image:linear-gradient(var(--cr),var(--cr));border-radius:50%;box-shadow:inset -2px -2px 5px rgba(0,0,0,.5),inset 2px 2px 5px rgba(255,255,255,.4),2px 2px 5px rgba(0,0,0,.4);cursor:pointer;border:none;outline:none}
         .ba:active{transform:scale(.95);box-shadow:inset 3px 3px 8px rgba(0,0,0,.6)}
         .blab{font-family:sans-serif;color:var(--cd);font-size:14px;font-weight:bold;letter-spacing:1px}
-        .sysb{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:20px}
+        .sysb{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);display:flex;gap:20px; transition: transform 0.3s ease;}
         .sysbc{display:flex;flex-direction:column;align-items:center;gap:5px}
-        .bsy{width:50px;height:12px;background:var(--cd);border-radius:10px;transform:rotate(-20deg);box-shadow:inset -1px -1px 3px rgba(0,0,0,.5),inset 1px 1px 2px rgba(255,255,255,.2),1px 1px 3px rgba(0,0,0,.3);cursor:pointer}
+        .bsy{width:50px;height:12px;background:var(--cd);background-image:linear-gradient(var(--cd),var(--cd));border-radius:10px;transform:rotate(-20deg);box-shadow:inset -1px -1px 3px rgba(0,0,0,.5),inset 1px 1px 2px rgba(255,255,255,.2),1px 1px 3px rgba(0,0,0,.3);cursor:pointer}
         .bsy:active{transform:rotate(-20deg) scale(.95);box-shadow:inset 2px 2px 5px rgba(0,0,0,.6)}
         .sysl{font-family:sans-serif;color:var(--cd);font-size:10px;font-weight:bold}
-        .spk{position:absolute;bottom:20px;right:20px;display:flex;gap:5px;transform:rotate(-20deg)}
-        .sps{width:6px;height:40px;background:rgba(0,0,0,.2);border-radius:3px;box-shadow:inset 1px 1px 2px rgba(0,0,0,.4),1px 1px 0 rgba(255,255,255,.4)}
+        .spk{position:absolute;bottom:20px;right:20px;display:flex;gap:5px;transform:rotate(-20deg); transition: transform 0.3s ease;}
+        .sps{width:6px;height:40px;background:rgba(0,0,0,.2);background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));border-radius:3px;box-shadow:inset 1px 1px 2px rgba(0,0,0,.4),1px 1px 0 rgba(255,255,255,.4)}
         .dh{position:absolute;z-index:10;cursor:pointer}
         .hu{width:30px;height:30px;left:30px;top:0} .hd{width:30px;height:30px;left:30px;bottom:0}
         .hl{width:30px;height:30px;left:0;top:30px} .hr{width:30px;height:30px;right:0;top:30px}
+
+        /* === FLUID LANDSCAPE (FULLSCREEN GAMEPAD) MODE === */
+        body.ls #gb { border-radius: 0; box-shadow: inset 0 0 50px rgba(0,0,0,.5); padding: 0; }
+        
+        /* Maximize the green screen with perfectly symmetric 24px top & bottom padding */
+        body.ls .sb { 
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
+            width: calc(96vh + 100px); height: calc(96vh + 48px); /* 50px Left/Right, 24px Top/Bottom */
+            margin: 0; border-radius: 12px; padding: 24px 50px; box-sizing: border-box; 
+        }
+        body.ls .cc { width: 96vh; height: 96vh; flex-shrink: 0; margin: 0; }
+        
+        /* Absolute position UI wrappers to prevent layout shifting */
+        body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
+        
+        /* Text shifted downward to safely avoid top-edge screen cropping */
+        body.ls .st { position: absolute; top: 14px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
+        
+        /* Battery dot & text mathematically centered in the 50px left margin */
+        body.ls .bat { position: absolute; left: 25px; top: 35px; transform: translateX(-50%); font-size: 6.5px; color: #aaa; flex-direction: column; align-items: center; width: auto; }
+        body.ls .bat .bl { margin-bottom: 4px; }
+        
+        body.ls .cw { margin: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10; }
+        body.ls .cw > * { pointer-events: auto; }
+        
+        /* Giant responsive Gamepad Buttons */
+        body.ls .dp { left: calc(12% + env(safe-area-inset-left)); top: 45%; transform: translate(-50%, -50%) scale(1.6); transform-origin: center center; margin: 0; }
+        body.ls .ab { right: calc(12% + env(safe-area-inset-right)); left: auto; top: 45%; transform: translate(50%, -50%) rotate(-20deg) scale(1.6); transform-origin: center center; margin: 0; }
+        body.ls .sysb { left: calc(12% + env(safe-area-inset-left)); right: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.4); transform-origin: center center; width: 120px; }
+        body.ls .spk { right: calc(12% + env(safe-area-inset-right)); left: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.4); transform-origin: center center; }
     </style>
 </head>
 <body>
+    <button id="tgl">ROTATE UI</button>
     <div class="gb" id="gb">
         <div class="sb">
             <div class="sh"><div class="bat"><div class="bl"></div>BATTERY</div><div class="st">DOT MATRIX WITH STEREO SOUND</div></div>
@@ -66,8 +110,37 @@
 
     <script>
         const M = Math, D = document, W = window;
-        const rsz = () => D.getElementById('gb').style.transform = `scale(${M.min(W.innerWidth/360, W.innerHeight/620)*.98})`;
-        W.addEventListener('resize', rsz); rsz();
+        
+        // --- Native Dimension Engine ---
+        const rsz = () => {
+            const gb = D.getElementById('gb');
+            const isLs = D.body.classList.contains('ls');
+            if (isLs) {
+                // By forcing exact native pixels, mobile browsers won't clip the background wrapper!
+                gb.style.width = W.innerWidth + 'px';
+                gb.style.height = W.innerHeight + 'px';
+                gb.style.transform = 'none'; 
+            } else {
+                gb.style.width = '380px';
+                gb.style.height = '680px';
+                const scale = M.min(W.innerWidth / 380, W.innerHeight / 680) * 0.98;
+                gb.style.transform = `scale(${scale})`;
+            }
+        };
+
+        const checkOri = () => {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in W);
+            if(isMobile) {
+                if(W.innerWidth > W.innerHeight) D.body.classList.add('ls');
+                else D.body.classList.remove('ls');
+            }
+            rsz();
+        };
+
+        W.addEventListener('resize', checkOri);
+        W.addEventListener('orientationchange', checkOri);
+        D.getElementById('tgl').addEventListener('click', () => { D.body.classList.toggle('ls'); rsz(); });
+        checkOri(); // Init layout
 
         const ctx = D.getElementById('cv').getContext('2d');
         const C0='#0f380f', C1='#306230', C2='#8bac0f', C3='#9bbc0f';
@@ -241,7 +314,7 @@
                 let bts=[]; for(let y=15;y>15-rws;y--) for(let x=0;x<10;x++) if(M.random()<.4) bts.push({x,y}); bts.sort(()=>M.random()-.5);
                 for(let i=0;i<bts.length;i++){ let p=bts[i], iF=i<fN; this.bd[p.y][p.x]={c:sC(p.x,p.y), f:iF}; if(iF) this.fl++; }
                 while(this.fl<fN){ let rx=~~(M.random()*10), ry=15-~~(M.random()*rws); if(!this.bd[ry][rx]){ this.bd[ry][rx]={c:sC(rx,ry), f:1}; this.fl++; } else if(!this.bd[ry][rx].f){ this.bd[ry][rx].f=1; this.fl++; } }
-                this.st = 'FALLING'; this.fT = 0;
+                this.DROP_SPEED = Math.max(150, 800 - this.lv * 60); this.gameState = 'FALLING';
             },
             sp(){
                 let sh = [[[0,0],[-1,0],[1,0],[0,-1]], [[0,0],[1,0],[0,1],[1,1]], [[0,0],[-1,0],[1,0],[1,-1]], [[0,0],[-1,0],[1,0],[-1,-1]], [[0,0],[-1,0],[1,0],[2,0]], [[0,0],[-1,0],[0,-1],[1,-1]], [[0,0],[1,0],[0,-1],[-1,-1]]];
@@ -277,7 +350,7 @@
             art(x,y,w,h){ fr(x,y,w,h,C3); sr(x,y,w,h,C0); fr(x+w/2-10,y+10,20,10,C0); fr(x+w/2-5,y+20,10,10,C0); fr(x+10,y+35,10,10,C0); fr(x+22,y+35,10,10,C1); }
         };
 
-        /* === 3. CATRAP (FIXED MAP PARSING) === */
+        /* === 3. CATRAP === */
         const CR = {
             n:"CATRAP", st:'START', lv:0, fr:"", fT:0, rT:0, m:[], p:{x:0,y:0}, bs:[], es:[], hs:[],
             ls:[ 
@@ -415,15 +488,555 @@
             art(x,y,w,h){ fr(x,y,w,h,C3); sr(x,y,w,h,C0); fr(x+20,y+40,40,4,C0); fr(x+35,y+25,4,4,C0); for(let i=0;i<3;i++){fr(x+10+i*22,y+5,18,6,C1);sr(x+10+i*22,y+5,18,6,C0);fr(x+10+i*22,y+13,18,6,C1);sr(x+10+i*22,y+13,18,6,C0);} }
         };
 
+        /* === 9. TALE OF ORB === */
+        const RP = {
+            n:"TALE OF ORB", st:'START', cX:0, cY:0, p:{}, lvl:[], en:[], it:[], chests:[], lv:1,
+            hD:["   0000   ","  022220  "," 02022020 "," 02222220 ","  020020  "," 01011010 "," 01111110 ","  011110  ","  02  20  "," 000  000 "].join(''),
+            hU:["   0000   ","  022220  "," 02222220 "," 02222220 ","  022220  "," 01011010 "," 01111110 ","  011110  ","  02  20  "," 000  000 "].join(''),
+            hS:["   0000   ","  022220  "," 0202220  "," 0222220  ","  02020   ","  010110  "," 0111110  ","  011110  ","   0220   ","  00000   "].join(''),
+            eO:["   0000   ","  011110  "," 01011010 "," 01111110 ","  001100  "," 01111110 "," 02011020 "," 02000020 ","  022220  ","   0000   "].join(''),
+            tT:["   0000   ","  011110  "," 01221110 "," 01211110 "," 01112210 ","  011110  ","   0000   ","   0220   ","   0220   ","   0000   "].join(''),
+            dP(s, x, y, f=0){
+                for(let i=0; i<100; i++) {
+                    let c = s[i];
+                    if(c !== ' ') fr(x+(f ? 9-(i%10) : i%10), y+~~(i/10), 1, 1, c==='0'?C0:c==='1'?C1:c==='2'?C2:C3);
+                }
+            },
+            ini(){
+                this.st='START'; 
+                this.p={x:40, y:260, w:10, h:10, d:3, hp:6, mHp:6, aT:0, hT:0, kx:0, ky:0, gems:0, keys:0};
+                this.genLvl(1);
+            },
+            genLvl(levelNum) {
+                this.lv = levelNum;
+                this.p.x = 40; this.p.y = 260; this.p.d = 3; this.p.keys = 0;
+                this.it = []; this.en = []; this.chests = [];
+                this.lvl = Array(30).fill(0).map(()=>Array(30).fill('.'));
+
+                for(let i=0; i<30; i++) { this.lvl[0][i] = this.lvl[29][i] = this.lvl[i][0] = this.lvl[i][29] = 'T'; }
+
+                let obs = ['T', 'R', 'W'];
+                for(let i=0; i<30 + this.lv*5; i++) {
+                    let r = 2+~~(M.random()*25), c = 2+~~(M.random()*25);
+                    let t = obs[~~(M.random()*obs.length)];
+                    this.lvl[r][c] = t;
+                    if(M.random()<.5) this.lvl[r+1][c] = t;
+                    if(M.random()<.5) this.lvl[r][c+1] = t;
+                }
+
+                for(let r=24; r<=28; r++) for(let c=1; c<=5; c++) this.lvl[r][c] = '.';
+
+                for(let r=1; r<=6; r++) for(let c=23; c<=28; c++) this.lvl[r][c] = '.'; 
+                for(let r=1; r<=6; r++) this.lvl[r][23] = 'T'; 
+                for(let c=24; c<=28; c++) this.lvl[6][c] = 'T'; 
+                this.lvl[6][25] = 'D'; 
+                this.lvl[3][26] = 'O'; 
+
+                let numC = 3 + ~~(M.random()*3);
+                for(let i=0; i<numC; i++) {
+                    let r, c;
+                    do { r = 2+~~(M.random()*25); c = 2+~~(M.random()*25); } 
+                    while(this.lvl[r][c] !== '.' || (r>20 && c<10) || (r<8 && c>20));
+                    this.lvl[r][c] = 'C';
+                    this.chests.push({r, c, k: false});
+                }
+                this.chests[~~(M.random()*this.chests.length)].k = true;
+
+                let numE = 3 + this.lv;
+                for(let i=0; i<numE; i++) {
+                    let r, c;
+                    do { r = 2+~~(M.random()*25); c = 2+~~(M.random()*25); } 
+                    while(this.lvl[r][c] !== '.' || (r>20 && c<10) || (r<8 && c>20));
+                    this.en.push({x:c*10, y:r*10, w:10, h:10, vx:(M.random()>.5?30:-30), vy:(M.random()>.5?30:-30), hp:2 + ~~(this.lv/3), hT:0, kx:0, ky:0});
+                }
+            },
+            tA(x,y,w,h){
+                let ts=[]; let r1=M.max(0,~~(y/10)), r2=M.min(this.lvl.length-1,~~((y+h-.1)/10));
+                let c1=M.max(0,~~(x/10)), c2=M.min(this.lvl[0].length-1,~~((x+w-.1)/10));
+                for(let r=r1; r<=r2; r++) for(let c=c1; c<=c2; c++) { let t = this.lvl[r][c]; if(t!=='.') ts.push({r,c,t}); }
+                return ts;
+            },
+            upd(dt){
+                if(this.st!=='PLAYING') return;
+                let dtS = M.min(dt/1000, 0.05); let p = this.p;
+                if(p.hT>0) p.hT -= dt; if(p.aT>0) p.aT -= dt;
+                
+                let nx = p.x, ny = p.y;
+                if(p.hT>0 && (M.abs(p.kx)>1 || M.abs(p.ky)>1)) {
+                    nx += p.kx*dtS; ny += p.ky*dtS; p.kx*=0.8; p.ky*=0.8;
+                } else if(p.aT<=0) {
+                    let spd = 70 * dtS;
+                    if(k.U) { ny -= spd; p.d = 1; } if(k.D) { ny += spd; p.d = 0; }
+                    if(k.L) { nx -= spd; p.d = 2; } if(k.R) { nx += spd; p.d = 3; }
+                }
+
+                let hw = 8, hh = 8;
+                let tsX = this.tA(nx+1, p.y+1, hw, hh);
+                let dX = tsX.find(b=>b.t==='D');
+                if(dX && p.keys>0 && this.en.length === 0) { this.lvl[dX.r][dX.c]='.'; p.keys--; tsX = this.tA(nx+1, p.y+1, hw, hh); }
+                if(!tsX.some(b=>['T','W','R','D','C','c'].includes(b.t))) p.x = nx;
+                
+                let tsY = this.tA(p.x+1, ny+1, hw, hh);
+                let dY = tsY.find(b=>b.t==='D');
+                if(dY && p.keys>0 && this.en.length === 0) { this.lvl[dY.r][dY.c]='.'; p.keys--; tsY = this.tA(p.x+1, ny+1, hw, hh); }
+                if(!tsY.some(b=>['T','W','R','D','C','c'].includes(b.t))) p.y = ny;
+
+                if(this.tA(p.x+1, p.y+1, hw, hh).some(b=>b.t==='O')) this.st='TRANS';
+
+                let sHx=0, sHy=0, sHw=0, sHh=0;
+                if(p.aT>0) {
+                    if(p.d===0) { sHx=p.x; sHy=p.y+p.h; sHw=10; sHh=10; }
+                    if(p.d===1) { sHx=p.x; sHy=p.y-10; sHw=10; sHh=10; }
+                    if(p.d===2) { sHx=p.x-10; sHy=p.y; sHw=10; sHh=10; }
+                    if(p.d===3) { sHx=p.x+p.w; sHy=p.y; sHw=10; sHh=10; }
+                }
+
+                for(let i=this.en.length-1; i>=0; i--){
+                    let e = this.en[i];
+                    if(e.hT>0) e.hT -= dt;
+                    let ex = e.x, ey = e.y;
+                    
+                    if(e.hT>0 && (M.abs(e.kx)>1 || M.abs(e.ky)>1)) {
+                        ex += e.kx*dtS; ey += e.ky*dtS; e.kx*=0.8; e.ky*=0.8;
+                    } else {
+                        ex += e.vx*dtS; ey += e.vy*dtS;
+                        if(M.random()<0.02) { e.vx=(M.random()-.5)*80; e.vy=(M.random()-.5)*80; }
+                    }
+
+                    if(this.tA(ex+1, e.y+1, hw, hh).some(b=>['T','W','R','D','C','c'].includes(b.t))) e.vx *= -1; else e.x = ex;
+                    if(this.tA(e.x+1, ey+1, hw, hh).some(b=>['T','W','R','D','C','c'].includes(b.t))) e.vy *= -1; else e.y = ey;
+
+                    if(p.aT>0 && e.hT<=0 && sHx<e.x+e.w && sHx+sHw>e.x && sHy<e.y+e.h && sHy+sHh>e.y) {
+                        e.hp--; e.hT=300; e.kx=(e.x-p.x>0?1:-1)*200; e.ky=(e.y-p.y>0?1:-1)*200;
+                        if(e.hp<=0) { 
+                            if(M.random()<0.6) this.it.push({x:e.x+2, y:e.y+2, t:M.random()<.5?'gem':'heart'});
+                            this.en.splice(i,1); continue; 
+                        }
+                    }
+
+                    if(p.hT<=0 && p.x+1<e.x+9 && p.x+9>e.x+1 && p.y+1<e.y+9 && p.y+9>e.y+1) {
+                        p.hp--; p.hT=800; p.kx=(p.x-e.x>0?1:-1)*200; p.ky=(p.y-e.y>0?1:-1)*200;
+                        if(p.hp<=0) this.st='GAMEOVER';
+                    }
+                }
+
+                for(let i=this.it.length-1; i>=0; i--) {
+                    let it = this.it[i];
+                    if(p.x < it.x+8 && p.x+p.w > it.x-2 && p.y < it.y+8 && p.y+p.h > it.y-2) {
+                        if(it.t==='gem') p.gems++;
+                        if(it.t==='key') p.keys++;
+                        if(it.t==='heart') p.hp = M.min(p.mHp, p.hp+2);
+                        this.it.splice(i,1);
+                    }
+                }
+
+                this.cX = M.max(0, M.min(this.lvl[0].length*10 - 200, p.x - 95));
+                this.cY = M.max(0, M.min(this.lvl.length*10 - 200, p.y - 95));
+            },
+            inp(b){ 
+                if(this.st==='START' && (b==='ST'||b==='A')) { this.st='PLAYING'; return; }
+                if(this.st==='GAMEOVER' && (b==='ST'||b==='A')) { this.ini(); this.st='PLAYING'; return; }
+                if(this.st==='TRANS' && (b==='ST'||b==='A')) { this.genLvl(this.lv+1); this.st='PLAYING'; return; }
+                
+                if(this.st==='PLAYING' && b==='A' && this.p.aT<=0) {
+                    this.p.aT = 150;
+                    let p = this.p, sx=p.x-2, sy=p.y-2, sw=14, sh=14;
+                    if(p.d===0) { sy+=10; sh=10; } 
+                    if(p.d===1) { sy-=10; sh=10; } 
+                    if(p.d===2) { sx-=10; sw=10; } 
+                    if(p.d===3) { sx+=10; sw=10; }
+                    
+                    let ts = this.tA(sx, sy, sw, sh);
+                    ts.forEach(b => {
+                        if(b.t==='C') {
+                            this.lvl[b.r][b.c] = 'c';
+                            let ch = this.chests.find(c => c.r === b.r && c.c === b.c);
+                            let dropT = ch && ch.k ? 'key' : (M.random() < 0.5 ? 'gem' : 'heart');
+                            
+                            let kx = b.c*10+2, ky = b.r*10+2;
+                            if(p.d===0) ky-=10; if(p.d===1) ky+=10; if(p.d===2) kx+=10; if(p.d===3) kx-=10;
+                            this.it.push({x: kx, y: ky, t: dropT});
+                        }
+                    });
+                }
+            },
+            drw(){
+                if(this.st==='START'){ txt("TALE OF ORB",100,80,12); txt("PRESS START",100,120,8); return; }
+
+                let c1 = M.max(0, ~~(this.cX/10)), c2 = M.min(this.lvl[0].length-1, ~~((this.cX+200)/10));
+                let r1 = M.max(0, ~~(this.cY/10)), r2 = M.min(this.lvl.length-1, ~~((this.cY+200)/10));
+
+                for(let r=r1; r<=r2; r++){
+                    for(let c=c1; c<=c2; c++){
+                        let x = c*10 - this.cX, y = r*10 - this.cY, t = this.lvl[r][c];
+                        if(t==='.') { fr(x,y,10,10,C3); if((r*7+c*11)%5===0) fr(x+2,y+6,2,2,C2); }
+                        if(t==='T') { this.dP(this.tT, x, y); }
+                        if(t==='W') { fr(x,y,10,10,C2); if((r+c+~~(gT/200))%2===0) { fr(x+2,y+4,6,2,C3); fr(x+4,y+6,2,2,C3); } else { fr(x+4,y+4,6,2,C3); fr(x+6,y+6,2,2,C3); } }
+                        if(t==='R') { fr(x,y+2,10,6,C1); fr(x+1,y+1,8,8,C2); sr(x+1,y+2,8,6,C0); }
+                        if(t==='C') { fr(x+1,y+2,8,7,C1); sr(x+1,y+2,8,7,C0); fr(x+1,y+2,8,3,C2); fr(x+4,y+4,2,2,C0); }
+                        if(t==='c') { fr(x+1,y+4,8,5,C1); sr(x+1,y+4,8,5,C0); fr(x+1,y+1,8,3,C2); sr(x+1,y+1,8,3,C0); }
+                        if(t==='D') { fr(x,y,10,10,C1); sr(x,y,10,10,C0); fr(x+3,y+3,4,4,C0); fr(x+4,y+7,2,3,C0); }
+                        if(t==='O') { if(~~(gT/200)%2===0) fr(x+2,y+2,6,6,C2); else fr(x+2,y+2,6,6,C3); sr(x+2,y+2,6,6,C0); }
+                    }
+                }
+
+                for(let it of this.it) {
+                    let ix = it.x - this.cX, iy = it.y - this.cY;
+                    if(it.t==='gem') { fr(ix+2,iy,2,6,C0); fr(ix,iy+2,6,2,C0); fr(ix+1,iy+1,4,4,C2); }
+                    if(it.t==='key') { fr(ix,iy+1,4,4,C2); sr(ix,iy+1,4,4,C0); fr(ix+4,iy+2,4,2,C0); fr(ix+6,iy+4,2,2,C0); }
+                    if(it.t==='heart') { fr(ix+1,iy+1,2,2,C0); fr(ix+5,iy+1,2,2,C0); fr(ix+1,iy+3,6,4,C0); }
+                }
+
+                for(let e of this.en) {
+                    if(e.hT>0 && ~~(gT/50)%2===0) continue;
+                    this.dP(this.eO, e.x - this.cX, e.y - this.cY, ~~(gT/150)%2);
+                }
+
+                let px = this.p.x - this.cX, py = this.p.y - this.cY;
+                if(this.p.hT<=0 || ~~(gT/50)%2===0) {
+                    let s = this.p.d===0 ? this.hD : this.p.d===1 ? this.hU : this.hS;
+                    this.dP(s, px, py, this.p.d===3);
+
+                    if(this.p.aT>0) {
+                        let cS = C0;
+                        if(this.p.d===0) { fr(px+4, py+10, 2, 8, cS); fr(px+3, py+10, 4, 2, C2); fr(px+4, py+12, 2, 6, C3); }
+                        if(this.p.d===1) { fr(px+4, py-8, 2, 8, cS); fr(px+3, py-2, 4, 2, C2); fr(px+4, py-8, 2, 6, C3); }
+                        if(this.p.d===2) { fr(px-8, py+4, 8, 2, cS); fr(px-2, py+3, 2, 4, C2); fr(px-8, py+4, 6, 2, C3); }
+                        if(this.p.d===3) { fr(px+10, py+4, 8, 2, cS); fr(px+10, py+3, 2, 4, C2); fr(px+12, py+4, 6, 2, C3); }
+                    }
+                }
+
+                for(let i=0; i<this.p.mHp/2; i++) {
+                    let hx = 5 + i*12, hy = 5;
+                    if(this.p.hp >= (i+1)*2) { fr(hx,hy,4,4,C0); fr(hx+5,hy,4,4,C0); fr(hx,hy+4,9,4,C0); fr(hx+2,hy+8,5,2,C0); }
+                    else if(this.p.hp === (i+1)*2-1) { fr(hx,hy,4,4,C0); fr(hx,hy+4,4,4,C0); fr(hx+2,hy+8,2,2,C0); }
+                    else { sr(hx,hy,9,8,C0); }
+                }
+                txt("G:"+this.p.gems, 195, 12, 8, 'right');
+                txt("K:"+this.p.keys, 195, 22, 8, 'right');
+                txt("M:"+this.en.length, 195, 32, 8, 'right');
+
+                if(this.st==='GAMEOVER'){fr(10,60,180,80,'rgba(155,188,15,.9)');sr(10,60,180,80,C0);txt("GAME OVER",100,100,12);}
+                if(this.st==='TRANS'){ 
+                    fr(10,60,180,80,'rgba(155,188,15,.9)'); sr(10,60,180,80,C0); 
+                    txt("ORB SECURED!",100,85,10); txt("LEVEL " + this.lv + " CLEAR",100,105,8); 
+                    if(~~(gT/400)%2===0)txt("PRESS START",100,125,8); 
+                }
+            },
+            art(x,y,w,h){ fr(x,y,w,h,C2); sr(x,y,w,h,C0); fr(x+w/2-5, y+h/2-5, 10, 10, C0); fr(x+w/2+10, y+h/2-10, 8, 20, C1); fr(x+w/2-20, y+h/2, 8, 8, C0); }
+        };
+
+        /* === 10. BOMBER BOY === */
+        const BM = {
+            n:"BOMBER BOY", st:'START', mC: 0,
+            ini(mode){
+                if(mode===undefined) { this.st='START'; this.mC=0; return; }
+                this.mode = mode; 
+                this.st='PLAYING';
+                this.map=[]; this.bs=[]; this.fs=[]; this.pwrs=[]; this.ens=[]; this.bots=[];
+                for(let y=0;y<13;y++){
+                    let r=[];
+                    for(let x=0;x<13;x++){
+                        if(x%2===1 && y%2===1) r.push('#');
+                        else r.push(M.random()<.6 ? 'S' : '.');
+                    }
+                    this.map.push(r);
+                }
+                
+                let clr = (cx,cy) => { this.map[cy][cx]='.'; this.map[cy][cx+(cx===0?1:-1)]='.'; this.map[cy+(cy===0?1:-1)][cx]='.'; };
+                clr(0,0);
+                this.p = {x:4, y:4, w:10, h:10, bMax:1, bRad:1, a:1};
+                
+                if(this.mode === 1) { 
+                    clr(12,0); clr(0,12); clr(12,12);
+                    this.bots.push({id:1, x:2+12*15, y:2, dx:-1, dy:0, bMax:1, bRad:1, a:1});
+                    this.bots.push({id:2, x:2, y:2+12*15, dx:1, dy:0, bMax:1, bRad:1, a:1});
+                    this.bots.push({id:3, x:2+12*15, y:2+12*15, dx:-1, dy:0, bMax:1, bRad:1, a:1});
+                }
+
+                let numE = this.mode === 0 ? 3 : 1; 
+                for(let i=0; i<numE; i++) {
+                    let ex, ey;
+                    do { ex = ~~(M.random()*13); ey = ~~(M.random()*13); }
+                    while (this.map[ey][ex] !== '.' || (ex<3 && ey<3) || (ex>9&&ey<3) || (ex<3&&ey>9) || (ex>9&&ey>9));
+                    let ds = [[-1,0],[1,0],[0,-1],[0,1]];
+                    let d = ds[~~(M.random()*4)];
+                    this.ens.push({x: 2+ex*15, y: 2+ey*15, dx: d[0], dy: d[1]});
+                }
+            },
+            cK(x,y, isE=0){
+                let r1=M.max(0,~~((y-2)/15)), r2=M.min(12,~~((y+9-2)/15));
+                let c1=M.max(0,~~((x-2)/15)), c2=M.min(12,~~((x+9-2)/15));
+                for(let r=r1;r<=r2;r++) for(let c=c1;c<=c2;c++) {
+                    if(this.map[r][c]==='#'||this.map[r][c]==='S') return 1;
+                }
+                for(let b of this.bs) {
+                    let bx = 2+b.x*15, by = 2+b.y*15;
+                    if (x < bx+15 && x+10 > bx && y < by+15 && y+10 > by) {
+                        if (isE || !b.wlk) return 1;
+                    }
+                }
+                return (x<2 || x+10>197 || y<2 || y+10>197);
+            },
+            upd(dt){
+                if(this.st!=='PLAYING') return;
+                let dtS = dt/1000, spd = 60*dtS;
+                
+                for(let b of this.bs) {
+                    if(b.wlk) {
+                        let bx = 2+b.x*15, by = 2+b.y*15;
+                        let pT = this.p.a && !(this.p.x >= bx+15 || this.p.x+10 <= bx || this.p.y >= by+15 || this.p.y+10 <= by);
+                        let bT = this.bots.some(bot => bot.a && !(bot.x >= bx+15 || bot.x+10 <= bx || bot.y >= by+15 || bot.y+10 <= by));
+                        if(!pT && !bT) b.wlk = 0; 
+                    }
+                }
+                
+                if(this.p.a) {
+                    let nx=this.p.x, ny=this.p.y;
+                    if(k.U) ny-=spd; if(k.D) ny+=spd;
+                    if(k.L) nx-=spd; if(k.R) nx+=spd;
+                    
+                    if(!this.cK(nx, this.p.y)) this.p.x = nx;
+                    else if(!k.U && !k.D) {
+                        let cy = (this.p.y-2)/15;
+                        if(cy - M.floor(cy) < 0.4 && !this.cK(nx, this.p.y-1)) this.p.y-=1;
+                        else if(cy - M.floor(cy) > 0.6 && !this.cK(nx, this.p.y+1)) this.p.y+=1;
+                    }
+                    
+                    if(!this.cK(this.p.x, ny)) this.p.y = ny;
+                    else if(!k.L && !k.R) {
+                        let cx = (this.p.x-2)/15;
+                        if(cx - M.floor(cx) < 0.4 && !this.cK(this.p.x-1, ny)) this.p.x-=1;
+                        else if(cx - M.floor(cx) > 0.6 && !this.cK(this.p.x+1, ny)) this.p.x+=1;
+                    }
+                }
+
+                for(let bot of this.bots) {
+                    if(!bot.a) continue;
+                    let nx=bot.x+bot.dx*spd, ny=bot.y+bot.dy*spd;
+                    
+                    let onB = this.bs.some(b=> {
+                         let bx=2+b.x*15, by=2+b.y*15;
+                         return (bot.x < bx+15 && bot.x+10 > bx && bot.y < by+15 && bot.y+10 > by);
+                    });
+
+                    if(!this.cK(nx, ny) || (onB && !this.cK(nx, ny, 1))) {
+                        bot.x = nx; bot.y = ny;
+                        if(M.random()<0.015 && this.bs.filter(b=>b.oid===bot.id).length < bot.bMax) {
+                            let cx = (bot.x-2)/15, cy = (bot.y-2)/15;
+                            if(M.abs(cx - M.round(cx)) < 0.2 && M.abs(cy - M.round(cy)) < 0.2) {
+                                let tx=M.round(cx), ty=M.round(cy);
+                                if(!this.bs.find(b=>b.x===tx && b.y===ty)) {
+                                    this.bs.push({x:tx, y:ty, t:2000, r:bot.bRad, wlk:1, oid:bot.id});
+                                    bot.dx *= -1; bot.dy *= -1;
+                                }
+                            }
+                        }
+                    } else {
+                        let cx = M.round((bot.x-2)/15), cy = M.round((bot.y-2)/15);
+                        bot.x = 2+cx*15; bot.y = 2+cy*15; 
+                        let ds = [[-1,0],[1,0],[0,-1],[0,1]];
+                        let valid = ds.filter(d => !this.cK(bot.x+d[0]*8, bot.y+d[1]*8));
+                        if(valid.length) {
+                            let d = valid[~~(M.random()*valid.length)];
+                            bot.dx = d[0]; bot.dy = d[1];
+                        } else { bot.dx *= -1; bot.dy *= -1; }
+
+                        if(M.random() < 0.6 && this.bs.filter(b=>b.oid===bot.id).length < bot.bMax) {
+                            if(!this.bs.find(b=>b.x===cx && b.y===cy)) {
+                                this.bs.push({x:cx, y:cy, t:2000, r:bot.bRad, wlk:1, oid:bot.id});
+                                bot.dx *= -1; bot.dy *= -1;
+                            }
+                        }
+                    }
+                }
+
+                for(let i=this.pwrs.length-1; i>=0; i--) {
+                    let pwr = this.pwrs[i];
+                    let px = 2+pwr.x*15, py = 2+pwr.y*15;
+                    let pick = (c) => (c.a && c.x < px+15 && c.x+10 > px && c.y < py+15 && c.y+10 > py);
+                    if(pick(this.p)) {
+                        if(pwr.t === 'F') this.p.bRad++; if(pwr.t === 'B') this.p.bMax++;
+                        this.pwrs.splice(i,1); continue;
+                    }
+                    for(let bot of this.bots) {
+                        if(pick(bot)) {
+                            if(pwr.t === 'F') bot.bRad++; if(pwr.t === 'B') bot.bMax++;
+                            this.pwrs.splice(i,1); break;
+                        }
+                    }
+                }
+
+                let eSpd = 30*dtS;
+                for(let i=this.ens.length-1; i>=0; i--) {
+                    let e = this.ens[i];
+                    let ex = e.x + e.dx*eSpd, ey = e.y + e.dy*eSpd;
+                    if(!this.cK(ex, ey, 1)) {
+                        e.x = ex; e.y = ey;
+                    } else {
+                        let ds = [[-1,0],[1,0],[0,-1],[0,1]];
+                        let valid = ds.filter(d => !this.cK(e.x+d[0]*2, e.y+d[1]*2, 1));
+                        if(valid.length > 0) {
+                            let d = valid[~~(M.random()*valid.length)];
+                            e.dx = d[0]; e.dy = d[1];
+                        } else { e.dx *= -1; e.dy *= -1; }
+                    }
+                    
+                    if(this.p.a && this.p.x < e.x+10 && this.p.x+10 > e.x && this.p.y < e.y+10 && this.p.y+10 > e.y) {
+                        this.p.a = 0; this.st = 'GAMEOVER';
+                    }
+                    for(let bot of this.bots) {
+                        if(bot.a && bot.x < e.x+10 && bot.x+10 > e.x && bot.y < e.y+10 && bot.y+10 > e.y) bot.a = 0;
+                    }
+                }
+
+                for(let i=this.bs.length-1; i>=0; i--) {
+                    this.bs[i].t -= dt;
+                    if(this.bs[i].t <= 0) {
+                        let b = this.bs.splice(i,1)[0];
+                        this.exp(b.x, b.y, b.r);
+                    }
+                }
+                
+                for(let i=this.fs.length-1; i>=0; i--) {
+                    this.fs[i].t -= dt;
+                    let f = this.fs[i];
+                    if(f.t <= 0) {
+                        this.fs.splice(i,1);
+                    } else {
+                        let fx = 2+f.x*15, fy = 2+f.y*15;
+                        let hit = (c) => (c.a && c.x < fx+14 && c.x+10 > fx+1 && c.y < fy+14 && c.y+10 > fy+1);
+                        
+                        if(hit(this.p)) { this.p.a = 0; this.st = 'GAMEOVER'; }
+                        for(let bot of this.bots) if(hit(bot)) bot.a = 0;
+
+                        for(let j=this.ens.length-1; j>=0; j--) {
+                            let e = this.ens[j];
+                            if(e.x < fx+14 && e.x+10 > fx+1 && e.y < fy+14 && e.y+10 > fy+1) this.ens.splice(j,1);
+                        }
+                        for(let j=this.pwrs.length-1; j>=0; j--) {
+                            if(this.pwrs[j].x === f.x && this.pwrs[j].y === f.y) this.pwrs.splice(j,1);
+                        }
+                    }
+                }
+                
+                if(this.mode === 0 && this.ens.length === 0 && this.st === 'PLAYING') this.st = 'TRANS';
+                if(this.mode === 1 && this.p.a && this.bots.filter(b=>b.a).length === 0 && this.st === 'PLAYING') this.st = 'TRANS';
+            },
+            exp(tx, ty, rad) {
+                this.addF(tx, ty);
+                let ds = [[0,-1],[0,1],[-1,0],[1,0]];
+                for(let d of ds) {
+                    for(let i=1; i<=rad; i++) {
+                        let nx = tx+d[0]*i, ny = ty+d[1]*i;
+                        if(nx<0||nx>12||ny<0||ny>12) break;
+                        let cell = this.map[ny][nx];
+                        if(cell === '#') break;
+                        
+                        let bIdx = this.bs.findIndex(b=>b.x===nx && b.y===ny);
+                        if(bIdx !== -1) this.bs[bIdx].t = 0;
+
+                        if(cell === 'S') {
+                            this.map[ny][nx] = '.';
+                            this.addF(nx, ny);
+                            if(M.random() < 0.25) this.pwrs.push({x: nx, y: ny, t: M.random() < 0.5 ? 'F' : 'B'});
+                            break; 
+                        }
+                        this.addF(nx, ny);
+                    }
+                }
+            },
+            addF(x, y) {
+                if(!this.fs.find(f=>f.x===x && f.y===y)) this.fs.push({x,y,t:400});
+            },
+            inp(b){
+                if(this.st==='START') {
+                    if(b==='U') this.mC = 0;
+                    if(b==='D') this.mC = 1;
+                    if(b==='ST'||b==='A') this.ini(this.mC); 
+                } else if(this.st==='GAMEOVER'||this.st==='TRANS'){ 
+                    if(b==='ST'||b==='A') this.ini(); 
+                } else if(this.st==='PLAYING' && b==='A' && this.p.a) {
+                    if(this.bs.filter(bm=>bm.oid===0).length < this.p.bMax) {
+                        let tx = M.round((this.p.x-2)/15), ty = M.round((this.p.y-2)/15);
+                        if(!this.bs.find(bm=>bm.x===tx && bm.y===ty)) {
+                            this.bs.push({x:tx, y:ty, t:2000, r:this.p.bRad, wlk:1, oid:0});
+                        }
+                    }
+                }
+            },
+            drw(){
+                if(this.st==='START'){ 
+                    txt("BOMBER BOY",100,40,14); 
+                    if(~~(gT/300)%2===0) txt(">", 20, this.mC===0 ? 90 : 110, 10, 'left', C0);
+                    txt("SOLO MODE", 100, 90, 10, 'center', this.mC===0?C0:C1);
+                    txt("AI MATCH", 100, 110, 10, 'center', this.mC===1?C0:C1);
+                    if(~~(gT/400)%2===0)txt("PRESS START",100,160,8); 
+                    return; 
+                }
+                
+                for(let y=0; y<13; y++) {
+                    for(let x=0; x<13; x++) {
+                        let px = 2+x*15, py = 2+y*15;
+                        let c = this.map[y][x];
+                        if(c==='#') { fr(px,py,15,15,C1); fr(px+2,py+2,11,11,C0); }
+                        else if(c==='S') { fr(px,py,15,15,C2); sr(px,py,15,15,C1); fr(px,py+7,15,1,C1); fr(px+7,py,1,7,C1); fr(px+3,py+7,1,8,C1); }
+                    }
+                }
+
+                for(let p of this.pwrs) {
+                    let px = 2+p.x*15, py = 2+p.y*15;
+                    fr(px+2, py+2, 11, 11, C3); sr(px+2, py+2, 11, 11, C0);
+                    txt(p.t, px+7.5, py+10, 8, 'center', C0);
+                }
+
+                for(let b of this.bs) {
+                    let px = 2+b.x*15, py = 2+b.y*15;
+                    ctx.fillStyle=C0; ctx.beginPath(); ctx.arc(px+7.5, py+7.5, 6, 0, M.PI*2); ctx.fill();
+                    if(~~(b.t/100)%2===0) fr(px+6, py+2, 3, 3, C3);
+                }
+
+                for(let f of this.fs) {
+                    let px = 2+f.x*15, py = 2+f.y*15;
+                    fr(px+2, py+2, 11, 11, C0); fr(px+4, py+4, 7, 7, C2); fr(px+6, py+6, 3, 3, C3);
+                }
+
+                for(let e of this.ens) {
+                    fr(e.x, e.y, 10, 10, C1); fr(e.x+2, e.y+2, 2, 2, C3); fr(e.x+6, e.y+2, 2, 2, C3);
+                }
+
+                for(let bot of this.bots) {
+                    if(!bot.a) continue;
+                    fr(bot.x, bot.y, 10, 10, C1);
+                    fr(bot.x+2, bot.y+2, 6, 5, C3); 
+                    fr(bot.x+3, bot.y+3, 1, 2, C0); 
+                    fr(bot.x+6, bot.y+3, 1, 2, C0); 
+                }
+
+                if (this.p.a) {
+                    fr(this.p.x, this.p.y, 10, 10, C0);
+                    fr(this.p.x+2, this.p.y+2, 6, 5, C3); 
+                    fr(this.p.x+3, this.p.y+3, 1, 2, C0); 
+                    fr(this.p.x+6, this.p.y+3, 1, 2, C0); 
+                }
+
+                if(this.st==='GAMEOVER'){ fr(10,60,180,80,'rgba(155,188,15,.9)'); sr(10,60,180,80,C0); txt("GAME OVER",100,100,12); }
+                if(this.st==='TRANS'){ fr(10,60,180,80,'rgba(155,188,15,.9)'); sr(10,60,180,80,C0); txt(this.mode===1?"SURVIVOR!":"CLEARED!",100,90,10); if(~~(gT/400)%2===0)txt("PRESS START",100,125,8); }
+            },
+            art(x,y,w,h){ fr(x,y,w,h,C3); sr(x,y,w,h,C0); ctx.fillStyle=C0; ctx.beginPath(); ctx.arc(x+w/2, y+h/2+5, 12, 0, M.PI*2); ctx.fill(); fr(x+w/2-2, y+h/2-10, 4, 6, C0); fr(x+w/2+4, y+h/2-2, 4, 4, C3); }
+        };
+
         /* === MENU & ROUTING === */
-        const GL = [ML, T2, CR, IV, SN, SD, PG, BB]; let mC = 0;
+        const GL = [ML, T2, CR, IV, SN, SD, PG, BB, RP, BM]; 
+        GL.sort((a, b) => a.n.localeCompare(b.n));
+        let mC = 0;
         GL.forEach(g=>g.ini()); 
 
         function drawMenu() {
-            txt("GAME SELECT", 100, 10, 10); fr(10, 28, 180, 2, C0); 
-            GL[mC].art(60, 35, 80, 50);
+            txt("GAME SELECT", 100, 22, 10); fr(10, 30, 180, 2, C0); 
+            GL[mC].art(60, 38, 80, 50);
 
-            let lX=20, lY=95, lH=80, iH=16, mxV=5;
+            let lX=20, lY=98, lH=80, iH=16, mxV=5;
             let scr = M.max(0, M.min((mC-2)*iH, M.max(0, (GL.length*iH)-lH)));
 
             ctx.save(); ctx.beginPath(); ctx.rect(lX, lY, 160, lH); ctx.clip();
