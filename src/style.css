@@ -70,8 +70,8 @@
         
         body.ls .dp { left: calc(15% + env(safe-area-inset-left)); top: 38%; transform: translate(-50%, -50%) scale(1.4); transform-origin: center center; margin: 0; }
         body.ls .ab { right: calc(15% + env(safe-area-inset-right)); left: auto; top: 38%; transform: translate(50%, -50%) rotate(-20deg) scale(1.4); transform-origin: center center; margin: 0; }
-        body.ls .sysb { left: calc(15% + env(safe-area-inset-left)); right: auto; bottom: calc(10% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.2); transform-origin: center center; width: 120px; }
-        body.ls .spk { right: calc(15% + env(safe-area-inset-right)); left: auto; bottom: calc(10% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.2); transform-origin: center center; }
+        body.ls .sysb { left: calc(15% + env(safe-area-inset-left)); right: auto; bottom: calc(5% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.2); transform-origin: center center; width: 120px; }
+        body.ls .spk { right: calc(15% + env(safe-area-inset-right)); left: auto; bottom: calc(5% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.2); transform-origin: center center; }
 
         /* Keyboard Mapping Modal */
         #kModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
