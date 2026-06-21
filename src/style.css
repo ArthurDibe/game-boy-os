@@ -57,21 +57,21 @@
             width: auto; height: auto; 
             margin: 0; border-radius: 12px; padding: 24px 30px; box-sizing: border-box; 
         }
-        body.ls .cc { width: 85vh; height: 85vh; flex-shrink: 0; margin: 0; }
+        body.ls .cc { width: 75vh; height: 75vh; flex-shrink: 0; margin: 0; max-width: 80vw; max-height: 80vw; }
         
         body.ls .sh { position: absolute; width: 100%; height: 100%; top: 0; left: 0; margin: 0; pointer-events: none; }
-        body.ls .st { position: absolute; top: 14px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
+        body.ls .st { position: absolute; top: 10px; left: 0; width: 100%; text-align: center; margin: 0; font-size: 6.5px; color: #aaa; letter-spacing: 1px; }
         
-        body.ls .bat { position: absolute; left: 25px; top: 35px; transform: translateX(-50%); font-size: 6.5px; color: #aaa; flex-direction: column; align-items: center; width: auto; }
+        body.ls .bat { position: absolute; left: 20px; top: 35px; transform: translateX(-50%); font-size: 6.5px; color: #aaa; flex-direction: column; align-items: center; width: auto; }
         body.ls .bat .bl { margin-bottom: 4px; }
         
         body.ls .cw { margin: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10; }
         body.ls .cw > * { pointer-events: auto; }
         
-        body.ls .dp { left: calc(12% + env(safe-area-inset-left)); top: 45%; transform: translate(-50%, -50%) scale(1.6); transform-origin: center center; margin: 0; }
-        body.ls .ab { right: calc(12% + env(safe-area-inset-right)); left: auto; top: 45%; transform: translate(50%, -50%) rotate(-20deg) scale(1.6); transform-origin: center center; margin: 0; }
-        body.ls .sysb { left: calc(12% + env(safe-area-inset-left)); right: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.4); transform-origin: center center; width: 120px; }
-        body.ls .spk { right: calc(12% + env(safe-area-inset-right)); left: auto; bottom: calc(12% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.4); transform-origin: center center; }
+        body.ls .dp { left: calc(15% + env(safe-area-inset-left)); top: 38%; transform: translate(-50%, -50%) scale(1.4); transform-origin: center center; margin: 0; }
+        body.ls .ab { right: calc(15% + env(safe-area-inset-right)); left: auto; top: 38%; transform: translate(50%, -50%) rotate(-20deg) scale(1.4); transform-origin: center center; margin: 0; }
+        body.ls .sysb { left: calc(15% + env(safe-area-inset-left)); right: auto; bottom: calc(10% + env(safe-area-inset-bottom)); transform: translate(-50%, 0) scale(1.2); transform-origin: center center; width: 120px; }
+        body.ls .spk { right: calc(15% + env(safe-area-inset-right)); left: auto; bottom: calc(10% + env(safe-area-inset-bottom)); transform: translate(50%, 0) rotate(-20deg) scale(1.2); transform-origin: center center; }
 
         /* Keyboard Mapping Modal */
         #kModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
