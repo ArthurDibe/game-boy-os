@@ -41,7 +41,7 @@ This project adheres to the classic 4-color dot-matrix palette for ultimate nost
 
 ## 🕹️ Controls & Key Bindings
 
-You can customize all keys in the UI by clicking the **KEY BINDINGS** button at the top of the screen!
+These keyboard controls are designed for desktop/large screens. You can play using the default key bindings listed below, or fully customize them to your preference by clicking the **KEY BINDINGS** button at the top of the screen!
 
 | Action | Game Boy Button | Default Keyboard Key |
 |---|---|---|
@@ -57,21 +57,21 @@ You can customize all keys in the UI by clicking the **KEY BINDINGS** button at 
 ---
 
 
-## 💾 Games Catalog
+## 💾 Current Game Catalog
 
-Our custom cartridge includes **a growing collection of fully playable games**. Select them from the OS Menu!
+Our custom cartridge includes the following list of games. This is the current catalog, and it will continue to grow as developers contribute new games! Select them from the OS Menu:
 
 | | Title | Genre | Description |
 |---|---|---|---|
-| 🧱 | **T2 (Tetris 2)** | Puzzle | Fall and fit blocks together in classic puzzle fashion. |
+| 💣 | **Bomber Boy** | Action | Maze exploration with strategic bomb placement. |
+| 💥 | **Brick Breaker**| Arcade | Retro brick deflection layout with bounce physics. |
 | 🐱 | **Catrap** | Logic | Re-imagination of the vintage Game Boy puzzle mechanic. |
 | 🛸 | **Invaders** | Arcade | A fast-paced space defense shooter. |
-| 🐍 | **Snake** | Arcade | Guide the snake, consume food, avoid yourself. |
-| 🪂 | **Skydive** | Action | Free fall downward, avoiding obstacles on your way down. |
 | 🏓 | **Pong** | Sports | Simple AI-driven paddle tennis simulation. |
-| 💥 | **Brick Breaker**| Arcade | Retro brick deflection layout with bounce physics. |
+| 🪂 | **Skydive** | Action | Free fall downward, avoiding obstacles on your way down. |
+| 🐍 | **Snake** | Arcade | Guide the snake, consume food, avoid yourself. |
+| 🧱 | **T2 (Tetris 2)** | Puzzle | Fall and fit blocks together in classic puzzle fashion. |
 | ⚔️ | **Tale of Orb** | RPG | A complete RPG adventure with dungeon grids. |
-| 💣 | **Bomber Boy** | Action | Maze exploration with strategic bomb placement. |
 
 ---
 
